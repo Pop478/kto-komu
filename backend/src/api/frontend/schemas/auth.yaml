@@ -1,0 +1,117 @@
+TelegramLoginRequest:
+    type: object
+    required:
+        - idToken
+    properties:
+        idToken:
+            type: string
+            description: Telegram OIDC ID Token
+            example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im9pZGMtMSJ9...
+        refCode:
+            type: string
+            format: uuid
+            nullable: true
+            description: Реферальный код пользователя
+        adLink:
+            type: string
+            nullable: true
+            description: Рекламная ссылка/метка
+
+GoogleCallbackRequest:
+    type: object
+    required:
+        - code
+        - state
+    properties:
+        code:
+            type: string
+            description: Authorization code, полученный от Google
+            example: 4/0AfJohX...
+        state:
+            type: string
+            description: State, возвращённый Google
+            example: 8f8bcd3b2f7e7a...
+
+EmailRegisterRequest:
+    type: object
+    required:
+        - email
+        - password
+        - turnstileToken
+    properties:
+        email:
+            type: string
+            format: email
+            example: user@gmail.com
+        password:
+            type: string
+            minLength: 8
+            example: StrongPassword123
+        name:
+            type: string
+            nullable: true
+            example: Evee
+        refCode:
+            type: string
+            nullable: true
+            format: uuid
+        adLink:
+            type: string
+            nullable: true
+        turnstileToken:
+            type: string
+
+ResendEmailVerificationRequest:
+    type: object
+    required:
+        - email
+        - turnstileToken
+    properties:
+        email:
+            type: string
+            format: email
+            example: user@gmail.com
+        turnstileToken:
+            type: string
+
+EmailLoginRequest:
+    type: object
+    required:
+        - email
+        - password
+    properties:
+        email:
+            type: string
+            format: email
+            example: user@gmail.com
+        password:
+            type: string
+            example: StrongPassword123
+
+ForgotPasswordRequest:
+    type: object
+    required:
+        - email
+        - turnstileToken
+    properties:
+        email:
+            type: string
+            format: email
+            example: user@gmail.com
+        turnstileToken:
+            type: string
+
+ResetPasswordRequest:
+    type: object
+    required:
+        - token
+        - password
+    properties:
+        token:
+            type: string
+            example: 0a84f9544af54b5f9d9d...
+
+        password:
+            type: string
+            minLength: 8
+            example: NewStrongPassword123

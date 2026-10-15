@@ -1,0 +1,1308 @@
+AdminUserBase:
+    type: object
+    required:
+        - id
+        - telegramId
+        - username
+        - first_name
+        - last_name
+        - is_premium
+        - languageCode
+        - photo_url
+        - role
+        - theme
+        - ban
+        - isBanned
+        - is_active
+        - createdAt
+        - updatedAt
+    properties:
+        id:
+            type: string
+            format: uuid
+            example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+        telegramId:
+            type:
+                - string
+                - 'null'
+            example: '6337131614'
+        username:
+            type:
+                - string
+                - 'null'
+            example: Ivan
+        first_name:
+            type:
+                - string
+                - 'null'
+            example: Ivan
+        last_name:
+            type:
+                - string
+                - 'null'
+            example: ''
+        is_premium:
+            type: boolean
+            example: false
+        languageCode:
+            type:
+                - string
+                - 'null'
+            example: ru
+        photo_url:
+            type:
+                - string
+                - 'null'
+            format: uri
+            example: 'https://example.com/avatar.svg'
+        role:
+            type: string
+            enum:
+                - user
+                - manager
+                - admin
+            example: user
+        theme:
+            type: string
+            enum:
+                - light
+                - dark
+                - system
+            example: dark
+        ban:
+            type: boolean
+            example: false
+        isBanned:
+            type: boolean
+            example: false
+        is_active:
+            type: boolean
+            example: true
+        createdAt:
+            type: string
+            format: date-time
+            example: '2026-05-23T20:51:23.070Z'
+        updatedAt:
+            type: string
+            format: date-time
+            example: '2026-05-27T09:33:22.074Z'
+
+AdminUserListItem:
+    allOf:
+        - $ref: '#/AdminUserBase'
+
+UsersListResponse:
+    type: object
+    required:
+        - ok
+        - users
+        - pagination
+    properties:
+        ok:
+            type: boolean
+            example: true
+        users:
+            type: array
+            items:
+                $ref: '#/AdminUserListItem'
+        pagination:
+            type: object
+            required:
+                - page
+                - limit
+                - total
+                - totalPages
+            properties:
+                page:
+                    type: integer
+                    minimum: 1
+                    example: 1
+                limit:
+                    type: integer
+                    minimum: 1
+                    maximum: 100
+                    example: 20
+                total:
+                    type: integer
+                    minimum: 0
+                    example: 100
+                totalPages:
+                    type: integer
+                    minimum: 0
+                    example: 5
+
+AdminUserOverview:
+    type: object
+    required:
+        - balance
+        - subscription
+        - charactersCount
+        - scenariosCount
+        - activeChatsCount
+        - chatsCount
+        - transactionsCount
+        - paymentsCount
+        - promoCodesCount
+        - tasksCount
+        - referralsCount
+        - reactionsCount
+    properties:
+        balance:
+            type: integer
+            example: 218
+        subscription:
+            $ref: '#/subscriptionTier'
+        charactersCount:
+            type: integer
+            minimum: 0
+            example: 1
+        scenariosCount:
+            type: integer
+            minimum: 0
+            example: 2
+        activeChatsCount:
+            type: integer
+            minimum: 0
+            example: 2
+        chatsCount:
+            type: integer
+            minimum: 0
+            example: 2
+        transactionsCount:
+            type: integer
+            minimum: 0
+            example: 43
+        paymentsCount:
+            type: integer
+            minimum: 0
+            example: 1
+        promoCodesCount:
+            type: integer
+            minimum: 0
+            example: 2
+        tasksCount:
+            type: integer
+            minimum: 0
+            example: 1
+        referralsCount:
+            type: integer
+            minimum: 0
+            example: 0
+        reactionsCount:
+            type: integer
+            minimum: 0
+            example: 1
+
+subscriptionTier:
+    type: string
+    enum:
+        - PLUS
+        - PREMIUM
+        - LEGENDARY
+    example: PREMIUM
+
+AuthUserSubscription:
+    type: object
+    nullable: true
+    required:
+        - tier
+        - startsAt
+        - expiresAt
+    properties:
+        userId:
+            type: string
+            format: uuid
+            example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+        status:
+            type: string
+            enum:
+                - pending
+                - active
+                - expired
+                - canceled
+        tier:
+            $ref: '#/subscriptionTier'
+        startsAt:
+            type: string
+            format: date-time
+            example: '2026-07-03T10:00:00.000Z'
+        expiresAt:
+            type: string
+            format: date-time
+            example: '2026-08-03T10:00:00.000Z'
+        createdAt:
+            type: string
+            format: date-time
+            example: '2026-08-03T10:00:00.000Z'
+        updatedAt:
+            type: string
+            format: date-time
+            example: '2026-08-03T10:00:00.000Z'
+
+AdminUserUniverse:
+    type:
+        - object
+        - 'null'
+    required:
+        - id
+        - name
+        - imageUrl
+    properties:
+        id:
+            type: string
+            format: uuid
+            example: '019e569b-5d3d-76e0-9e3b-933e1806a0c1'
+        name:
+            type: string
+            example: 'Fantasy World'
+        imageUrl:
+            type:
+                - string
+                - 'null'
+            format: uri
+            example: 'http://localhost:5000/api/public/character/naruto.webp'
+
+AdminUserCharacter:
+    type: object
+    required:
+        - id
+        - universeId
+        - userId
+        - source
+        - name
+        - photoUrl
+        - description
+        - gender
+        - age
+        - systemPrompt
+        - chatsCount
+        - isActive
+        - createdAt
+        - updatedAt
+        - universe
+    properties:
+        id:
+            type: string
+            format: uuid
+        universeId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        userId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        source:
+            type: string
+            enum:
+                - system
+                - user
+            example: user
+        name:
+            type: string
+            example: 'Rimuru Tempest'
+        photoUrl:
+            type:
+                - string
+                - 'null'
+            format: uri
+        description:
+            type:
+                - string
+                - 'null'
+            example: 'User-created character description'
+        gender:
+            type: string
+            enum:
+                - male
+                - female
+                - other
+            example: male
+        age:
+            type:
+                - integer
+                - 'null'
+            example: 24
+        systemPrompt:
+            type: string
+            example: 'Character system prompt'
+        chatsCount:
+            type: integer
+            minimum: 0
+            example: 2
+        isActive:
+            type: boolean
+            example: true
+        createdAt:
+            type: string
+            format: date-time
+        updatedAt:
+            type: string
+            format: date-time
+        universe:
+            $ref: '#/AdminUserUniverse'
+
+AdminUserScenarioCharacter:
+    type:
+        - object
+        - 'null'
+    required:
+        - id
+        - name
+        - photoUrl
+    properties:
+        id:
+            type: string
+            format: uuid
+        name:
+            type: string
+            example: 'Rimuru Tempest'
+        photoUrl:
+            type:
+                - string
+                - 'null'
+            format: uri
+
+AdminUserScenario:
+    type: object
+    required:
+        - id
+        - characterId
+        - userId
+        - source
+        - name
+        - photoUrl
+        - description
+        - tags
+        - systemPrompt
+        - greetingMessage
+        - model
+        - provider
+        - temperature
+        - topP
+        - maxTokens
+        - presencePenalty
+        - frequencyPenalty
+        - settings
+        - isActive
+        - createdAt
+        - updatedAt
+        - character
+    properties:
+        id:
+            type: string
+            format: uuid
+        characterId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        userId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        source:
+            type: string
+            enum:
+                - system
+                - user
+            example: user
+        name:
+            type: string
+            example: 'Romantic adventure'
+        photoUrl:
+            type:
+                - string
+                - 'null'
+            format: uri
+        description:
+            type:
+                - string
+                - 'null'
+            example: 'Scenario description'
+        tags:
+            type: array
+            items:
+                type: string
+            example:
+                - romance
+                - adventure
+        systemPrompt:
+            type: string
+            example: 'Scenario system prompt'
+        greetingMessage:
+            type:
+                - string
+                - 'null'
+            example: 'Hello!'
+        model:
+            type:
+                - string
+                - 'null'
+            example: 'google/gemma-4-26b-a4b-it:free'
+        provider:
+            type:
+                - string
+                - 'null'
+            example: openrouter
+        temperature:
+            type: number
+            example: 0.7
+        topP:
+            type: number
+            example: 1
+        maxTokens:
+            type:
+                - integer
+                - 'null'
+            example: 1000
+        presencePenalty:
+            type:
+                - number
+                - 'null'
+            example: null
+        frequencyPenalty:
+            type:
+                - number
+                - 'null'
+            example: null
+        settings:
+            type:
+                - object
+                - 'null'
+            additionalProperties: true
+            example: null
+        isActive:
+            type: boolean
+            example: true
+        createdAt:
+            type: string
+            format: date-time
+        updatedAt:
+            type: string
+            format: date-time
+        character:
+            $ref: '#/AdminUserScenarioCharacter'
+
+AdminUserChatCharacter:
+    type:
+        - object
+        - 'null'
+    required:
+        - id
+        - name
+        - photoUrl
+        - description
+    properties:
+        id:
+            type: string
+            format: uuid
+        name:
+            type: string
+            example: 'Rimuru Tempest'
+        photoUrl:
+            type:
+                - string
+                - 'null'
+            format: uri
+        description:
+            type:
+                - string
+                - 'null'
+            example: 'Character description'
+
+AdminUserChatScenario:
+    type:
+        - object
+        - 'null'
+    required:
+        - id
+        - name
+        - greetingMessage
+        - model
+        - provider
+    properties:
+        id:
+            type: string
+            format: uuid
+        name:
+            type: string
+            example: 'Test scenario'
+        greetingMessage:
+            type:
+                - string
+                - 'null'
+            example: 'Hello!'
+        model:
+            type:
+                - string
+                - 'null'
+            example: 'baidu/cobuddy:free'
+        provider:
+            type:
+                - string
+                - 'null'
+            example: openrouter
+
+AdminUserChat:
+    type: object
+    required:
+        - id
+        - userId
+        - characterId
+        - scenarioId
+        - title
+        - status
+        - characterSnapshot
+        - scenarioSnapshot
+        - lastMessageAt
+        - deletedAt
+        - createdAt
+        - updatedAt
+        - messagesCount
+        - attachmentsCount
+        - character
+        - scenario
+    properties:
+        id:
+            type: string
+            format: uuid
+        userId:
+            type: string
+            format: uuid
+        characterId:
+            type: string
+            format: uuid
+        scenarioId:
+            type: string
+            format: uuid
+        title:
+            type:
+                - string
+                - 'null'
+            example: 'Rimuru Tempest'
+        status:
+            type: string
+            enum:
+                - active
+                - archived
+                - deleted
+            example: active
+        characterSnapshot:
+            type:
+                - object
+                - 'null'
+            additionalProperties: true
+        scenarioSnapshot:
+            type:
+                - object
+                - 'null'
+            additionalProperties: true
+            example: null
+        lastMessageAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+        deletedAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+            example: null
+        createdAt:
+            type: string
+            format: date-time
+        updatedAt:
+            type: string
+            format: date-time
+        messagesCount:
+            type: integer
+            minimum: 0
+            example: 2
+        attachmentsCount:
+            type: integer
+            minimum: 0
+            example: 0
+        character:
+            $ref: '#/AdminUserChatCharacter'
+        scenario:
+            $ref: '#/AdminUserChatScenario'
+
+AdminUserContent:
+    type: object
+    required:
+        - charactersCount
+        - scenariosCount
+        - chatsCount
+        - activeChatsCount
+        - characters
+        - scenarios
+        - chats
+    properties:
+        charactersCount:
+            type: integer
+            minimum: 0
+            example: 1
+        scenariosCount:
+            type: integer
+            minimum: 0
+            example: 2
+        chatsCount:
+            type: integer
+            minimum: 0
+            example: 2
+        activeChatsCount:
+            type: integer
+            minimum: 0
+            example: 2
+        characters:
+            type: array
+            items:
+                $ref: '#/AdminUserCharacter'
+        scenarios:
+            type: array
+            items:
+                $ref: '#/AdminUserScenario'
+        chats:
+            type: array
+            items:
+                $ref: '#/AdminUserChat'
+
+AdminUserBalanceTransaction:
+    type: object
+    required:
+        - id
+        - userId
+        - balanceId
+        - type
+        - direction
+        - amount
+        - balanceBefore
+        - balanceAfter
+        - entityType
+        - entityId
+        - description
+        - metadata
+        - createdAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        userId:
+            type: string
+            format: uuid
+        balanceId:
+            type: string
+            format: uuid
+        type:
+            type: string
+            enum:
+                - top_up
+                - message_generation
+                - image_generation
+                - task_reward
+                - referral_reward
+                - subscription_bonus
+                - promo_code
+                - admin_credit
+                - admin_debit
+                - daily_reward
+                - refund
+                - other
+            example: message_generation
+        direction:
+            type: string
+            enum:
+                - credit
+                - debit
+            example: debit
+        amount:
+            type: integer
+            example: 1
+        balanceBefore:
+            type: integer
+            example: 219
+        balanceAfter:
+            type: integer
+            example: 218
+        entityType:
+            type:
+                - string
+                - 'null'
+            example: ChatMessage
+        entityId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        description:
+            type:
+                - string
+                - 'null'
+            example: 'User chat message'
+        metadata:
+            type:
+                - object
+                - 'null'
+            additionalProperties: true
+        createdAt:
+            type: string
+            format: date-time
+
+AdminUserBalancePayment:
+    type: object
+    required:
+        - id
+        - userId
+        - packageId
+        - tokens
+        - amount
+        - currency
+        - method
+        - status
+        - provider
+        - providerPaymentId
+        - paymentUrl
+        - transactionId
+        - metadata
+        - paidAt
+        - failedAt
+        - canceledAt
+        - createdAt
+        - updatedAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        userId:
+            type: string
+            format: uuid
+        packageId:
+            type: string
+            example: tokens_1000
+        tokens:
+            type: integer
+            example: 1000
+        amount:
+            type: integer
+            example: 300
+        currency:
+            type: string
+            example: XTR
+        method:
+            type: string
+            enum:
+                - stars
+                - rub
+            example: stars
+        status:
+            type: string
+            enum:
+                - pending
+                - paid
+                - failed
+                - canceled
+            example: pending
+        provider:
+            type:
+                - string
+                - 'null'
+            example: telegram_stars
+        providerPaymentId:
+            type:
+                - string
+                - 'null'
+            example: null
+        paymentUrl:
+            type:
+                - string
+                - 'null'
+            format: uri
+        transactionId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+            example: null
+        metadata:
+            type:
+                - object
+                - 'null'
+            additionalProperties: true
+        paidAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+            example: null
+        failedAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+            example: null
+        canceledAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+            example: null
+        createdAt:
+            type: string
+            format: date-time
+        updatedAt:
+            type: string
+            format: date-time
+
+AdminUserPaginatedItems:
+    type: object
+    required:
+        - total
+        - count
+        - limit
+        - offset
+        - items
+    properties:
+        total:
+            type: integer
+            minimum: 0
+            example: 43
+        count:
+            type: integer
+            minimum: 0
+            example: 20
+        limit:
+            type: integer
+            minimum: 1
+            example: 20
+        offset:
+            type: integer
+            minimum: 0
+            example: 0
+        items:
+            type: array
+            items: {}
+
+AdminUserFinance:
+    type: object
+    required:
+        - balance
+        - transactions
+        - payments
+    properties:
+        balance:
+            type: integer
+            example: 218
+        transactions:
+            allOf:
+                - $ref: '#/AdminUserPaginatedItems'
+                - type: object
+                  properties:
+                      items:
+                          type: array
+                          items:
+                              $ref: '#/AdminUserBalanceTransaction'
+        payments:
+            allOf:
+                - $ref: '#/AdminUserPaginatedItems'
+                - type: object
+                  properties:
+                      total:
+                          example: 1
+                      count:
+                          example: 1
+                      items:
+                          type: array
+                          items:
+                              $ref: '#/AdminUserBalancePayment'
+
+AdminUserPromoCode:
+    type: object
+    additionalProperties: true
+    required:
+        - id
+        - userId
+        - promoCodeId
+        - balanceAmount
+        - transactionId
+        - usedAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        userId:
+            type: string
+            format: uuid
+        promoCodeId:
+            type: string
+            format: uuid
+        balanceAmount:
+            type: integer
+            example: 5
+        transactionId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        usedAt:
+            type: string
+            format: date-time
+        promoCode:
+            type: object
+            additionalProperties: true
+        transaction:
+            $ref: '#/AdminUserBalanceTransaction'
+
+AdminUserTask:
+    type: object
+    additionalProperties: true
+    required:
+        - id
+        - userId
+        - taskId
+        - status
+        - reward
+        - transactionId
+        - startedAt
+        - completedAt
+        - rewardedAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        userId:
+            type: string
+            format: uuid
+        taskId:
+            type: string
+            format: uuid
+        status:
+            type: string
+            enum:
+                - pending
+                - completed
+                - rewarded
+                - rejected
+                - expired
+            example: rewarded
+        reward:
+            type: integer
+            example: 10
+        transactionId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        startedAt:
+            type: string
+            format: date-time
+        completedAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+        rewardedAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+        task:
+            type: object
+            additionalProperties: true
+
+AdminUserReferral:
+    type: object
+    required:
+        - id
+        - referrerId
+        - referredId
+        - earnedUsd
+        - percent
+        - createdAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        referrerId:
+            type: string
+            format: uuid
+        referredId:
+            type: string
+            format: uuid
+        earnedUsd:
+            type: string
+            example: '0.000000'
+        percent:
+            type: string
+            example: '10.00'
+        createdAt:
+            type: string
+            format: date-time
+
+AdminUserReaction:
+    type: object
+    required:
+        - id
+        - userId
+        - characterId
+        - type
+        - createdAt
+        - updatedAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        userId:
+            type: string
+            format: uuid
+        characterId:
+            type: string
+            format: uuid
+        type:
+            type: string
+            enum:
+                - like
+                - dislike
+            example: like
+        createdAt:
+            type: string
+            format: date-time
+        updatedAt:
+            type: string
+            format: date-time
+
+AdminUserDailyReward:
+    type:
+        - object
+        - 'null'
+    required:
+        - id
+        - userId
+        - currentDay
+        - lastClaimedAt
+        - createdAt
+        - updatedAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        userId:
+            type: string
+            format: uuid
+        currentDay:
+            type: integer
+            example: 5
+        lastClaimedAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+        createdAt:
+            type: string
+            format: date-time
+        updatedAt:
+            type: string
+            format: date-time
+
+AdminUserSimpleCollection:
+    type: object
+    required:
+        - total
+        - count
+        - items
+    properties:
+        total:
+            type: integer
+            minimum: 0
+        count:
+            type: integer
+            minimum: 0
+        items:
+            type: array
+            items: {}
+
+AdminUserEngagement:
+    type: object
+    required:
+        - promoCodes
+        - tasks
+        - referrals
+        - reactions
+        - dailyReward
+    properties:
+        promoCodes:
+            allOf:
+                - $ref: '#/AdminUserSimpleCollection'
+                - type: object
+                  properties:
+                      items:
+                          type: array
+                          items:
+                              $ref: '#/AdminUserPromoCode'
+        tasks:
+            allOf:
+                - $ref: '#/AdminUserSimpleCollection'
+                - type: object
+                  properties:
+                      items:
+                          type: array
+                          items:
+                              $ref: '#/AdminUserTask'
+        referrals:
+            type: object
+            required:
+                - referredBy
+                - total
+                - count
+                - items
+            properties:
+                referredBy:
+                    anyOf:
+                        - $ref: '#/AdminUserReferral'
+                        - type: 'null'
+                    example: null
+                total:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                count:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                items:
+                    type: array
+                    items:
+                        $ref: '#/AdminUserReferral'
+        reactions:
+            allOf:
+                - $ref: '#/AdminUserSimpleCollection'
+                - type: object
+                  properties:
+                      items:
+                          type: array
+                          items:
+                              $ref: '#/AdminUserReaction'
+        dailyReward:
+            $ref: '#/AdminUserDailyReward'
+
+AdminUserDetails:
+    allOf:
+        - $ref: '#/AdminUserBase'
+        - type: object
+          required:
+              - balance
+              - overview
+              - content
+              - finance
+              - engagement
+              - charactersCount
+              - characters
+              - scenariosCount
+              - scenarios
+              - chatsCount
+              - activeChatsCount
+              - chats
+          properties:
+              balance:
+                  type: integer
+                  example: 218
+              subscription:
+                  $ref: '#/AuthUserSubscription'
+              overview:
+                  $ref: '#/AdminUserOverview'
+              content:
+                  $ref: '#/AdminUserContent'
+              finance:
+                  $ref: '#/AdminUserFinance'
+              engagement:
+                  $ref: '#/AdminUserEngagement'
+              charactersCount:
+                  type: integer
+                  minimum: 0
+                  example: 1
+              characters:
+                  type: array
+                  items:
+                      $ref: '#/AdminUserCharacter'
+              scenariosCount:
+                  type: integer
+                  minimum: 0
+                  example: 2
+              scenarios:
+                  type: array
+                  items:
+                      $ref: '#/AdminUserScenario'
+              chatsCount:
+                  type: integer
+                  minimum: 0
+                  example: 2
+              activeChatsCount:
+                  type: integer
+                  minimum: 0
+                  example: 2
+              chats:
+                  type: array
+                  items:
+                      $ref: '#/AdminUserChat'
+
+UserResponse:
+    type: object
+    required:
+        - ok
+        - user
+    properties:
+        ok:
+            type: boolean
+            example: true
+        user:
+            $ref: '#/AdminUserDetails'
+
+UserProfileResponse:
+    type: object
+    required:
+        - ok
+        - user
+    properties:
+        ok:
+            type: boolean
+            example: true
+        user:
+            $ref: '#/AdminUserBase'
+
+UserBalanceUpdateResponse:
+    type: object
+    required:
+        - ok
+        - user
+        - balance
+        - transaction
+    properties:
+        ok:
+            type: boolean
+            example: true
+        user:
+            $ref: '#/AdminUserBase'
+        balance:
+            type: integer
+            example: 318
+        transaction:
+            $ref: '#/AdminUserBalanceTransaction'
+
+UserSubscriptionUpdateResponse:
+    type: object
+    required:
+        - ok
+        - user
+        - subscription
+    properties:
+        ok:
+            type: boolean
+            example: true
+        user:
+            $ref: '#/AdminUserBase'
+        subscription:
+            $ref: '#/AuthUserSubscription'

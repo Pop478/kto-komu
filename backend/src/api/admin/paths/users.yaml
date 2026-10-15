@@ -1,0 +1,266 @@
+GetAdminUsers:
+    summary: Get admin users
+    operationId: getAdminUsers
+    tags:
+        - AdminUsers
+
+    parameters:
+        - in: query
+          name: page
+          schema:
+              type: integer
+              minimum: 1
+              example: 1
+        - in: query
+          name: limit
+          schema:
+              type: integer
+              minimum: 1
+              maximum: 100
+              example: 20
+        - in: query
+          name: search
+          schema:
+              type: string
+              example: '@ivan'
+        - in: query
+          name: isBanned
+          schema:
+              type: boolean
+              example: false
+        - in: query
+          name: role
+          schema:
+              type: string
+              enum: [user, admin]
+              example: user
+
+    responses:
+        '200':
+            description: Users list
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/users.yaml#/UsersListResponse'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '500':
+            $ref: '../responses/error.yaml#/InternalServerError'
+
+GetAdminUser:
+    summary: Get admin user by ID
+    operationId: getAdminUser
+    tags:
+        - AdminUsers
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+              example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+
+    responses:
+        '200':
+            description: User details
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/users.yaml#/UserResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+
+UpdateAdminUser:
+    summary: Update admin user
+    operationId: updateAdminUser
+    tags:
+        - AdminUsers
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+              example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/users.yaml#/UpdateUserRequest'
+
+    responses:
+        '200':
+            description: User updated
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/users.yaml#/UserProfileResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+
+UpdateAdminUserBalance:
+    summary: Update admin user balance
+    operationId: updateAdminUserBalance
+    tags:
+        - AdminUsers
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+              example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/users.yaml#/UpdateUserBalanceRequest'
+
+    responses:
+        '200':
+            description: User balance updated
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/users.yaml#/UserBalanceUpdateResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+        '409':
+            $ref: '../responses/error.yaml#/Conflict'
+
+UpdateAdminUserSubscription:
+    summary: Update admin user subscription
+    operationId: updateAdminUserSubscription
+    tags:
+        - AdminUsers
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+              example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/users.yaml#/UpdateUserSubscriptionRequest'
+
+    responses:
+        '200':
+            description: User subscription updated
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/users.yaml#/UserSubscriptionUpdateResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+        '409':
+            $ref: '../responses/error.yaml#/Conflict'
+
+SetAdminUserBan:
+    summary: Set admin user ban status
+    operationId: setAdminUserBan
+    tags:
+        - AdminUsers
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+              example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/users.yaml#/SetUserBanRequest'
+
+    responses:
+        '200':
+            description: User ban status updated
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/users.yaml#/UserProfileResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+
+DeleteAdminUser:
+    summary: Delete admin user
+    operationId: deleteAdminUser
+    tags:
+        - AdminUsers
+
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+              example: '019e569b-5d3d-76e0-9e3b-933e1806a0cc'
+
+    responses:
+        '200':
+            description: User deleted
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/users.yaml#/UserProfileResponse'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'

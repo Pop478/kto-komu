@@ -1,0 +1,66 @@
+openapi: '3.1.0'
+info:
+    title: Banana V2
+    version: '1.0.0'
+    license:
+        name: MIT
+        identifier: MIT
+        url: https://opensource.org/licenses/MIT
+
+servers:
+    #- url: /api
+    - url: http://localhost:5000/api
+      description: Current server
+
+components:
+    securitySchemes:
+        cookieAuth:
+            type: apiKey
+            in: cookie
+            name: ACCESS_TOKEN
+
+security:
+    - cookieAuth: []
+
+paths:
+    # AUTH
+    /v1/auth/telegram-mini-app:
+        post:
+            $ref: './paths/auth.yaml#/AuthTelegramMiniApp'
+
+    /v1/auth/telegram-login:
+        post:
+            $ref: './paths/auth.yaml#/AuthTelegramLogin'
+
+    /v1/auth/google/url:
+        get:
+            $ref: './paths/auth.yaml#/GoogleAuthRedirect'
+    /v1/auth/google/callback:
+        post:
+            $ref: './paths/auth.yaml#/AuthGoogleCallback'
+
+    /v1/auth/email/register:
+        post:
+            $ref: './paths/auth.yaml#/AuthEmailRegister'
+    /v1/auth/email/login:
+        post:
+            $ref: './paths/auth.yaml#/AuthEmailLogin'
+    /v1/auth/email/verify-email:
+        get:
+            $ref: './paths/auth.yaml#/VerifyEmail'
+    /v1/auth/email/resend-email:
+        post:
+            $ref: './paths/auth.yaml#/ResendEmail'
+    /v1/auth/email/forgot-password:
+        post:
+            $ref: './paths/auth.yaml#/ForgotPassword'
+    /v1/auth/email/reset-password:
+        post:
+            $ref: './paths/auth.yaml#/ResetPassword'
+    /v1/auth/me:
+        get:
+            $ref: './paths/auth.yaml#/MeUser'
+
+    /v1/auth/logout:
+        post:
+            $ref: './paths/auth.yaml#/LogoutUser'

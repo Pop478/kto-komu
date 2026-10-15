@@ -1,0 +1,133 @@
+UpdateUserRequest:
+    type: object
+    additionalProperties: false
+    minProperties: 1
+    properties:
+        username:
+            type:
+                - string
+                - 'null'
+            maxLength: 255
+            example: ivan
+        first_name:
+            type:
+                - string
+                - 'null'
+            maxLength: 255
+            example: Ivan
+        last_name:
+            type:
+                - string
+                - 'null'
+            maxLength: 255
+            example: Petrov
+        languageCode:
+            type:
+                - string
+                - 'null'
+            maxLength: 10
+            example: ru
+        photo_url:
+            type:
+                - string
+                - 'null'
+            format: uri
+            example: https://example.com/avatar.jpg
+        is_premium:
+            type: boolean
+            example: true
+        role:
+            type: string
+            enum: [user, manager, admin]
+            example: user
+        theme:
+            type: string
+            enum: [light, dark, system]
+            example: system
+        ban:
+            type: boolean
+            example: false
+        isBanned:
+            type: boolean
+            example: false
+        is_active:
+            type: boolean
+            example: true
+
+UpdateUserBalanceRequest:
+    type: object
+    additionalProperties: false
+    required:
+        - amount
+        - direction
+    properties:
+        amount:
+            type: integer
+            minimum: 1
+            example: 100
+        direction:
+            type: string
+            enum: [credit, debit]
+            example: credit
+        description:
+            type: string
+            example: Manual admin balance correction
+
+UpdateUserSubscriptionRequest:
+    type: object
+    properties:
+        action:
+            type: string
+            enum:
+                - create
+                - update
+                - cancel
+            default: update
+            example: create
+
+        subscriptionId:
+            type: string
+            format: uuid
+            nullable: true
+            example: '019f02fd-f61c-7008-be3e-6d3222dec98c'
+
+        tier:
+            $ref: '../responses/users.yaml#/subscriptionTier'
+
+        startsAt:
+            type: string
+            format: date-time
+            nullable: true
+            example: '2026-07-03T10:00:00.000Z'
+
+        expiresAt:
+            type: string
+            format: date-time
+            nullable: true
+            example: '2026-08-03T10:00:00.000Z'
+
+        durationDays:
+            type: integer
+            minimum: 1
+            example: 30
+
+        status:
+            type: string
+            enum:
+                - pending
+                - active
+                - expired
+                - canceled
+            example: active
+
+SetUserBanRequest:
+    type: object
+    additionalProperties: false
+    minProperties: 1
+    properties:
+        isBanned:
+            type: boolean
+            example: true
+        ban:
+            type: boolean
+            example: true

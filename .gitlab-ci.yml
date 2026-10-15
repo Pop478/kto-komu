@@ -1,0 +1,102 @@
+stages:
+    - build
+    - deploy
+
+before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+
+# BUILD TEMPLATE
+.build_template: &build_template
+    stage: build
+    script:
+        - echo "Building $IMAGE_NAME"
+
+        - docker build -f $DOCKERFILE_PATH -t "$CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_SHA" -t "$CI_REGISTRY_IMAGE/$IMAGE_NAME:latest" $CONTEXT
+
+        - docker push "$CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_SHA"
+        - docker push "$CI_REGISTRY_IMAGE/$IMAGE_NAME:latest"
+
+        - docker rmi "$CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_SHA" || true
+        - docker rmi "$CI_REGISTRY_IMAGE/$IMAGE_NAME:latest" || true
+
+        - docker image prune -a -f --filter "until=24h"
+        - docker builder prune -f --filter "unused-for=24h"
+    only:
+        - prod
+
+# FRONTEND BUILD
+build-frontend:
+    stage: build
+    script:
+        - echo "Building frontend"
+        - |
+            docker build \
+              -f ./Frontend/Dockerfile \
+              --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL \
+              --build-arg VITE_TONCONNECT_MANIFEST_URL=$VITE_TONCONNECT_MANIFEST_URL \
+              -t "$CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHA" \
+              -t "$CI_REGISTRY_IMAGE/frontend:latest" \
+              ./
+        - docker push "$CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHA"
+        - docker push "$CI_REGISTRY_IMAGE/frontend:latest"
+    only:
+        - prod
+
+# ADMIN BUILD
+build-admin:
+    stage: build
+    script:
+        - echo "Building admin"
+        - |
+            docker build \
+              -f ./admin/Dockerfile \
+              -t "$CI_REGISTRY_IMAGE/admin:$CI_COMMIT_SHA" \
+              -t "$CI_REGISTRY_IMAGE/admin:latest" \
+              ./
+        - docker push "$CI_REGISTRY_IMAGE/admin:$CI_COMMIT_SHA"
+        - docker push "$CI_REGISTRY_IMAGE/admin:latest"
+    only:
+        - prod
+
+# BACKEND BUILD
+build-backend:
+    <<: *build_template
+    variables:
+        IMAGE_NAME: backend
+        DOCKERFILE_PATH: ./Backend/dockerfile
+        CONTEXT: ./Backend
+
+# DEPLOY
+deploy:
+    stage: deploy
+    before_script:
+        - mkdir -p ~/.ssh
+        - echo "$SSH_KEY_DEV" > ~/.ssh/id_ed25519
+        - chmod 600 ~/.ssh/id_ed25519
+    script:
+        # копируем compose
+        - scp -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 docker-compose.yaml $SERVER_USER_DEV@$SERVER_IP_DEV:/opt/ferra/docker-compose.yaml
+        # копируем env файлы на сервер
+        - scp -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 $BACKEND_ENV_DEV $DEV_SERVER_USER@$DEV_SERVER_IP:/opt/ferra/Backend/.env
+        # создать .env для docker-compose
+        - |
+            ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no $DEV_SERVER_USER@$DEV_SERVER_IP "
+                cat > /opt/ferra/.env <<EOF
+                POSTGRES_DB=$POSTGRES_DB
+                POSTGRES_USER=$POSTGRES_USER
+                POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+                URL=$URL_DEV
+                API_URL=$API_URL_DEV
+                EOF
+            "
+        # deploy
+        - |
+            ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no $DEV_SERVER_USER@$DEV_SERVER_IP "
+              docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY &&
+              cd /opt/ferra &&
+              docker compose pull &&
+              docker compose up -d --remove-orphans &&
+              docker image prune -f
+            "
+    only:
+        - prod

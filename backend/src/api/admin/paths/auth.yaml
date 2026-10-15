@@ -1,0 +1,85 @@
+LoginAdmin:
+    summary: Авторизация в админ панель
+    operationId: loginAdmin
+    tags:
+        - Auth
+    security: [] # login не требует авторизации
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - email
+                        - password
+                    properties:
+                        email:
+                            type: string
+                            description: Логин администратора
+                        password:
+                            type: string
+                            format: password
+                            description: Пароль администратора
+
+    responses:
+        '200':
+            description: Успешная авторизация
+            headers:
+                Set-Cookie:
+                    description: Устанавливает ADMIN_ACCESS_TOKEN cookie
+                    schema:
+                        type: string
+                        example: ADMIN_ACCESS_TOKEN=jwt; HttpOnly; Path=/; SameSite=Lax
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/LoginAdminSuccessResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+
+MeAdmin:
+    summary: Проверка админа
+    operationId: MeAdmin
+    tags:
+        - Auth
+
+    responses:
+        '200':
+            description: Успешная проверка
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/LoginAdminSuccessResponse'
+
+        '500':
+            $ref: '../responses/error.yaml#/InternalServerError'
+
+LogoutAdmin:
+    summary: Выход
+    operationId: logoutAdmin
+    tags:
+        - Auth
+
+    responses:
+        '200':
+            description: Успешный выход
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            ok:
+                                type: boolean
+                                example: true
+                            message:
+                                type: string
+                                example: Logout successful
+                        required:
+                            - ok
+                            - message
+
+        '500':
+            $ref: '../responses/error.yaml#/InternalServerError'

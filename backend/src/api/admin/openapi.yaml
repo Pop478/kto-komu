@@ -1,0 +1,39 @@
+openapi: '3.1.0'
+
+info:
+    title: VWaifu Admin API
+    version: '1.0.0'
+    license:
+        name: MIT
+        identifier: MIT
+        url: https://opensource.org/licenses/MIT
+
+servers:
+    - url: http://localhost:5000/api
+
+components:
+    securitySchemes:
+        adminCookieAuth:
+            type: apiKey
+            in: cookie
+            name: ADMIN_ACCESS_TOKEN
+
+security:
+    - adminCookieAuth: []
+
+paths:
+    # AUTH
+    /v1/auth/admin/login:
+        post:
+            $ref: './paths/auth.yaml#/LoginAdmin'
+    /v1/auth/admin/me:
+        get:
+            $ref: './paths/auth.yaml#/MeAdmin'
+    /v1/auth/admin/logout:
+        post:
+            $ref: './paths/auth.yaml#/LogoutAdmin'
+
+    # USERS
+    /v1/admin/users:
+        get:
+            $ref: './paths/users.yaml#/GetAdminUsers'

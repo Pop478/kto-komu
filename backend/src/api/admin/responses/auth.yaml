@@ -1,0 +1,35 @@
+LoginAdminSuccessResponse:
+    type: object
+    required:
+        - ok
+        - admin
+    properties:
+        ok:
+            type: boolean
+            example: true
+        admin:
+            type: object
+            additionalProperties: false
+            required:
+                - id
+                - email
+                - role
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                    example: 019eebca-0343-763f-a60d-e6546804b0b6
+
+                email:
+                    type: string
+                    format: email
+                    example: admin@local.dev
+
+                role:
+                    type: string
+                    enum:
+                        - owner
+                        - admin
+                        - ad_manager
+                        - viewer
+                    example: owner

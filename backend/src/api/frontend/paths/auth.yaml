@@ -1,0 +1,312 @@
+AuthTelegramMiniApp:
+    summary: Авторизация через Telegram Mini App initData
+    operationId: authTelegramMiniApp
+    tags:
+        - Auth
+
+    parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: 'Формат: `tma <initData>`'
+          schema:
+              type: string
+              example: 'tma query_id=AAFe...'
+        - in: query
+          name: ref
+          required: false
+          description: Реферальный код пользователя
+          schema:
+              type: string
+              format: uuid
+        - in: query
+          name: telegramBotId
+          required: false
+          description: Telegram bot id
+          schema:
+              type: string
+              example: '8196739079'
+        - in: query
+          name: adLink
+          required: false
+          description: Рекламная ссылка/метка
+          schema:
+              type: string
+
+    responses:
+        '200':
+            description: Успешная авторизация
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            description: Пользователь заблокирован
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthBannedResponse'
+
+AuthTelegramLogin:
+    summary: Авторизация через Telegram Login OIDC
+    operationId: authTelegramLogin
+    tags:
+        - Auth
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/auth.yaml#/TelegramLoginRequest'
+
+    responses:
+        '200':
+            description: Успешная авторизация
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            description: Пользователь заблокирован
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthBannedResponse'
+
+GoogleAuthRedirect:
+    summary: Редирект на Google OAuth/OIDC
+    operationId: googleAuthRedirect
+    tags:
+        - Auth
+
+    responses:
+        '302':
+            description: Редирект на страницу авторизации Google
+            headers:
+                Location:
+                    description: URL авторизации Google
+                    schema:
+                        type: string
+                        format: uri
+        '500':
+            $ref: '../responses/error.yaml#/InternalServerError'
+
+AuthGoogleCallback:
+    summary: Авторизация через Google OAuth/OIDC callback
+    operationId: authGoogleCallback
+    tags:
+        - Auth
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/auth.yaml#/GoogleCallbackRequest'
+
+    responses:
+        '200':
+            description: Успешная авторизация
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            description: Пользователь заблокирован
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthBannedResponse'
+
+AuthEmailRegister:
+    summary: Регистрация по email и паролю
+    operationId: authEmailRegister
+    tags:
+        - Auth
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/auth.yaml#/EmailRegisterRequest'
+
+    responses:
+        '201':
+            description: Пользователь зарегистрирован
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/MessageResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '409':
+            description: Email уже зарегистрирован
+        '500':
+            $ref: '../responses/error.yaml#/InternalServerError'
+
+ResendEmail:
+    summary: Повторная отправка письма подтверждения email
+    operationId: authResendEmailVerification
+    tags:
+        - Auth
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/auth.yaml#/ResendEmailVerificationRequest'
+
+    responses:
+        '200':
+            description: Если email существует и не подтверждён, письмо будет отправлено
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/MessageResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '429':
+            description: Слишком много попыток отправки письма
+        '500':
+            $ref: '../responses/error.yaml#/InternalServerError'
+
+AuthEmailLogin:
+    summary: Авторизация по email и паролю
+    operationId: authEmailLogin
+    tags:
+        - Auth
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/auth.yaml#/EmailLoginRequest'
+
+    responses:
+        '200':
+            description: Успешная авторизация
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            description: Пользователь заблокирован или email не подтверждён
+            content:
+                application/json:
+                    schema:
+                        oneOf:
+                            - $ref: '../responses/auth.yaml#/AuthBannedResponse'
+                            - $ref: '../responses/auth.yaml#/EmailNotVerifiedResponse'
+
+VerifyEmail:
+    summary: Подтверждение email
+    operationId: verifyEmail
+    tags:
+        - Auth
+
+    parameters:
+        - in: query
+          name: token
+          required: true
+          schema:
+              type: string
+
+    responses:
+        '302':
+            description: Редирект на страницу результата подтверждения
+
+ForgotPassword:
+    summary: Отправить письмо для сброса пароля
+    operationId: forgotPassword
+    tags:
+        - Auth
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/auth.yaml#/ForgotPasswordRequest'
+
+    responses:
+        '200':
+            description: Письмо отправлено (или email отсутствует)
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/MessageResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+
+ResetPassword:
+    summary: Сбросить пароль
+    operationId: resetPassword
+    tags:
+        - Auth
+
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/auth.yaml#/ResetPasswordRequest'
+
+    responses:
+        '200':
+            description: Пароль успешно изменён
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/MessageResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+
+MeUser:
+    summary: Получить текущего пользователя
+    operationId: meUser
+    tags:
+        - Auth
+
+    responses:
+        '200':
+            description: Текущий пользователь
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+
+LogoutUser:
+    summary: Выйти из аккаунта
+    operationId: logoutUser
+    tags:
+        - Auth
+
+    responses:
+        '200':
+            description: Успешный выход
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/auth.yaml#/LogoutSuccessResponse'

@@ -1,0 +1,31 @@
+model account {
+  id                    String      @id @default(uuid(7)) @db.Uuid
+  username              String?     @db.VarChar(255)
+  first_name            String?     @db.VarChar(255)
+  last_name             String?     @db.VarChar(255)
+  languageCode          String?     @db.VarChar(10)   
+  photo_url             String?
+  role                  UserRole    @default(user)
+  theme                 UserTheme   @default(dark)
+  ban                   Boolean     @default(false)
+  is_active             Boolean     @default(true)
+  termsAccepted         Boolean     @default(false)
+  registeredFromBotId   String?     @db.Uuid
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  @@index([username])
+}
+
+enum UserRole {
+  user
+  manager
+  admin
+}
+
+enum UserTheme {
+  light
+  dark
+  system
+}
+

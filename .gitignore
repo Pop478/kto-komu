@@ -1,0 +1,30 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.pid
+
+# Env (секреты для всего проекта)
+.env
+
+# DB
+*.db
+*.sqlite
+*.sqlite3
+
+
+# Docker
+docker-compose.override.yml
+
+# Coverage общие
+coverage/
+
+.VSCodeCounter/

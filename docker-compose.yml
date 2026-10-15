@@ -1,0 +1,118 @@
+name: VWaifu
+
+services:
+    traefik:
+        image: traefik:v3
+        pull_policy: never
+        container_name: traefik
+        restart: unless-stopped
+        command:
+            - '--api.insecure=true'
+            - '--providers.docker=true'
+            - '--providers.docker.exposedbydefault=false'
+            - '--entrypoints.web.address=:80'
+        ports:
+            - '80:80'
+            - '8080:8080'
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - app-network
+
+    frontend:
+        build:
+            context: ./Frontend
+        container_name: frontend
+        restart: unless-stopped
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.frontend.rule=Host(`${URL}`)'
+            - 'traefik.http.routers.frontend.entrypoints=web'
+            - 'traefik.http.routers.frontend.priority=1'
+            - 'traefik.http.services.frontend.loadbalancer.server.port=3000'
+        ports:
+            - '80:80'
+        environment:
+            APP_PREFIX: 'PREFIX_'
+            ASSET_DIR: '/usr/share/nginx/html'
+            PREFIX_URL: 'https://banana.marusinohome.ru'
+            PREFIX_API_URL: 'https://banana.marusinohome.ru/api'
+            PREFIX_TG_APP_URL: 'https://t.me/AniFight_DEV_Bot/App'
+            PREFIX_SUPPORT_LINK: 'https://t.me/AniFight_support_bot'
+        env_file:
+            - ./Frontend/.env.production
+        depends_on:
+            - backend
+        networks:
+            - app-network
+
+    admin:
+        build:
+            context: ./admin
+        container_name: admin
+        restart: unless-stopped
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.admin.rule=Host(`${URL}`) && (PathPrefix(`/api`))'
+            - 'traefik.http.routers.admin.entrypoints=web'
+            - 'traefik.http.routers.admin.priority=1'
+            - 'traefik.http.services.admin.loadbalancer.server.port=3000'
+        ports:
+            - '80:80'
+        depends_on:
+            - backend
+        networks:
+            - app-network
+
+    backend:
+        build:
+            context: ./Backend
+        container_name: backend
+        restart: unless-stopped
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.routers.backend.rule=Host(`${URL}`) && (PathPrefix(`/api`))'
+            - 'traefik.http.routers.backend.entrypoints=web'
+            - 'traefik.http.routers.backend.priority=100'
+            - 'traefik.http.services.backend.loadbalancer.server.port=8080'
+        env_file:
+            - ./Backend/.env
+        depends_on:
+            - postgres
+        networks:
+            - app-network
+
+    postgres:
+        image: postgres:16
+        pull_policy: never
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        ports:
+            - '5433:5432'
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./init-scripts:/docker-entrypoint-initdb.d
+        networks:
+            - app-network
+
+    redis:
+        image: redis:8.6.4-alpine
+        pull_policy: never
+        container_name: redis
+        restart: unless-stopped
+        volumes:
+            - redis_data:/data
+        networks:
+            - app-network
+
+volumes:
+    postgres_data:
+    redis_data:
+
+networks:
+    app-network:
+        driver: bridge
