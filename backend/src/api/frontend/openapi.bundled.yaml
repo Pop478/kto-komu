@@ -7,7 +7,7 @@ info:
     identifier: MIT
     url: https://opensource.org/licenses/MIT
 servers:
-  - url: http://localhost:5000/api
+  - url: /api
     description: Current server
 security:
   - cookieAuth: []
