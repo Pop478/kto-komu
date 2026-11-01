@@ -2,10 +2,10 @@
 
 import type { GetInfo, GetAnnotations } from "react-router/internal";
 
-type Module = typeof import("../QRscan.js")
+type Module = typeof import("../QRScan.js")
 
 type Info = GetInfo<{
-  file: "./pages/QRScan/QRscan.tsx",
+  file: "./pages/QRScan/QRScan.tsx",
   module: Module
 }>
 
@@ -16,8 +16,8 @@ type Matches = [{
   id: "components/layout/Layout";
   module: typeof import("../../../components/layout/Layout.js");
 }, {
-  id: "pages/QRScan/QRscan";
-  module: typeof import("../QRscan.js");
+  id: "pages/QRScan/QRScan";
+  module: typeof import("../QRScan.js");
 }];
 
 type Annotations = GetAnnotations<Info & { module: Module, matches: Matches }>;

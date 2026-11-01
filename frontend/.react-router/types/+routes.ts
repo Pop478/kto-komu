@@ -90,8 +90,8 @@ type RouteFiles = {
     id: "pages/groups/GroupDetails";
     page: "/groups/:groupId";
   };
-  "./pages/QRScan/QRscan.tsx": {
-    id: "pages/QRScan/QRscan";
+  "./pages/QRScan/QRScan.tsx": {
+    id: "pages/QRScan/QRScan";
     page: "/qr-scan";
   };
   "./pages/settlements/Settlements.tsx": {
@@ -130,7 +130,7 @@ type RouteModules = {
   "pages/groups/Groups": typeof import("./src/./pages/groups/Groups.tsx");
   "pages/groups/NewGroup": typeof import("./src/./pages/groups/NewGroup.tsx");
   "pages/groups/GroupDetails": typeof import("./src/./pages/groups/GroupDetails.tsx");
-  "pages/QRScan/QRscan": typeof import("./src/./pages/QRScan/QRscan.tsx");
+  "pages/QRScan/QRScan": typeof import("./src/./pages/QRScan/QRScan.tsx");
   "pages/settlements/Settlements": typeof import("./src/./pages/settlements/Settlements.tsx");
   "pages/profile/Profile": typeof import("./src/./pages/profile/Profile.tsx");
   "pages/not-found/NotFound": typeof import("./src/./pages/not-found/NotFound.tsx");

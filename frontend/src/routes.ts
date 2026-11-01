@@ -15,7 +15,7 @@ export default [
         route('groups', './pages/groups/Groups.tsx'),
         route('groups/new', './pages/groups/NewGroup.tsx'),
         route('groups/:groupId', './pages/groups/GroupDetails.tsx'),
-        route('qr-scan', './pages/QRScan/QRscan.tsx'),
+        route('qr-scan', './pages/QRScan/QRScan.tsx'),
         route('settlements', './pages/settlements/Settlements.tsx'),
         route('profile', './pages/profile/Profile.tsx'),
         route('*', './pages/not-found/NotFound.tsx'),
