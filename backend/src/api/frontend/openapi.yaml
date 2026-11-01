@@ -8,8 +8,8 @@ info:
         url: https://opensource.org/licenses/MIT
 
 servers:
-    #- url: /api
-    - url: http://localhost:5000/api
+    - url: /api
+      # - url: http://localhost:5000/api
       description: Current server
 
 components:
