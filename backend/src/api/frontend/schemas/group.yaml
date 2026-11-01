@@ -1,0 +1,50 @@
+GroupCreateRequest:
+    type: object
+    additionalProperties: false
+    required:
+        - name
+    properties:
+        name:
+            type: string
+            minLength: 1
+            maxLength: 150
+            example: Weekend trip
+
+GroupUpdateRequest:
+    type: object
+    additionalProperties: false
+    required:
+        - name
+    properties:
+        name:
+            type: string
+            minLength: 1
+            maxLength: 150
+            example: New group name
+
+GroupAddMemberRequest:
+    type: object
+    additionalProperties: false
+    required:
+        - accountId
+    properties:
+        accountId:
+            type: string
+            format: uuid
+        displayName:
+            type: string
+            minLength: 1
+            maxLength: 100
+            description: Optional name displayed in this group. The account profile name is used when omitted.
+
+GroupUpdateMemberRoleRequest:
+    type: object
+    additionalProperties: false
+    required:
+        - role
+    properties:
+        role:
+            type: string
+            enum:
+                - ADMIN
+                - MEMBER

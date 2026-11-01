@@ -1,7 +1,7 @@
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { reactRouter } from '@react-router/dev/vite'
 import mkcert from 'vite-plugin-mkcert'
+import svgr from 'vite-plugin-svgr'
 import { VitePWA, type ManifestOptions } from 'vite-plugin-pwa'
 
 export const manifest: Partial<ManifestOptions> = {
@@ -50,9 +50,9 @@ export const manifest: Partial<ManifestOptions> = {
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
-        react(),
         mkcert(),
         reactRouter(),
+        svgr(),
         VitePWA({
             registerType: 'autoUpdate',
             outDir: 'build/client',

@@ -6,281 +6,129 @@ AuthSuccessResponse:
     properties:
         ok:
             type: boolean
-            example: true
+            const: true
         user:
             $ref: '#/AuthUser'
         isNewUser:
             type: boolean
-            example: false
-
-AuthUser:
-    type: object
-    required:
-        - id
-        - is_premium
-        - role
-        - createdAt
-        - balance
-        - profile
-    properties:
-        id:
-            type: string
-            format: uuid
-            example: 019e3858-fdaa-7728-b8f5-990013a67f1d
-        telegramId:
-            type:
-                - string
-                - 'null'
-            example: '6337131614'
-        email:
-            type:
-                - string
-                - 'null'
-            format: email
-            example: user@gmail.com
-        username:
-            type:
-                - string
-                - 'null'
-            example: Stepazavrik
-        first_name:
-            type:
-                - string
-                - 'null'
-            example: Ига
-        last_name:
-            type:
-                - string
-                - 'null'
-            example: ''
-        languageCode:
-            type:
-                - string
-                - 'null'
-            example: ru
-        is_premium:
-            type: boolean
-            example: false
-        role:
-            type: string
-            enum:
-                - user
-                - manager
-                - admin
-            example: user
-        photo_url:
-            type:
-                - string
-                - 'null'
-            format: uri
-            example: https://t.me/i/userpic/320/avatar.jpg
-        theme:
-            type: string
-            enum:
-                - light
-                - dark
-                - system
-            example: dark
-        termsAccepted:
-            type: boolean
-            example: false
-        createdAt:
-            type: string
-            format: date-time
-            example: '2026-05-17T23:50:16.746Z'
-        balance:
-            type: integer
-            example: 40
-        subscription:
-            $ref: '#/AuthUserSubscription'
-        profile:
-            $ref: '#/AuthUserProfile'
-        settings:
-            $ref: '#/AuthUserSettings'
-        chatSettings:
-            $ref: '#/AuthUserChatSettings'
-
-AuthUserProfile:
-    type: object
-    required:
-        - id
-        - isDefault
-        - gender
-    properties:
-        id:
-            type: string
-            format: uuid
-            example: 019e3858-fdaa-7728-b8f5-990013a67f1d
-        isDefault:
-            type: boolean
-            example: true
-        name:
-            type:
-                - string
-                - 'null'
-            example: Ига
-        gender:
-            type: string
-            enum:
-                - male
-                - female
-                - neutral
-            default: neutral
-            example: neutral
-        appearance:
-            type:
-                - string
-                - 'null'
-            example: Высокий парень с тёмными волосами
-        clothing:
-            type:
-                - string
-                - 'null'
-            example: Чёрная худи и свободные штаны
-        personality:
-            type:
-                - string
-                - 'null'
-            example: Спокойный, немного саркастичный
-        interests:
-            type:
-                - string
-                - 'null'
-            example: Аниме, игры, романтика
-        extraInfo:
-            type:
-                - string
-                - 'null'
-            example: Любит тёплое обращение
-AuthUserSettings:
-    type: object
-    required:
-        - vibration
-        - audio
-    properties:
-        vibration:
-            type: boolean
-            example: true
-        audio:
-            type: boolean
-            example: true
-        profileBackgroundUrl:
-            type: string
-
-AuthUserChatSettings:
-    type: object
-    required:
-        - fontSize
-    properties:
-        chatBackgroundUrl:
-            type:
-                - string
-                - 'null'
-            example: null
-        chatBackgroundColor:
-            type:
-                - string
-                - 'null'
-            example: null
-        messageColor:
-            type:
-                - string
-                - 'null'
-            example: null
-        messageTextColor:
-            type:
-                - string
-                - 'null'
-            example: null
-        otherMessageColor:
-            type:
-                - string
-                - 'null'
-            example: null
-        otherMessageTextColor:
-            type:
-                - string
-                - 'null'
-            example: null
-        fontFamily:
-            type:
-                - string
-                - 'null'
-            example: null
-        fontSize:
-            type: integer
-            example: 16
-
-AuthUserSubscription:
-    type: object
-    nullable: true
-    required:
-        - tier
-        - startsAt
-        - expiresAt
-    properties:
-        tier:
-            type: string
-            enum:
-                - PLUS
-                - PREMIUM
-                - LEGENDARY
-            example: PREMIUM
-        startsAt:
-            type: string
-            format: date-time
-            example: '2026-07-03T10:00:00.000Z'
-        expiresAt:
-            type: string
-            format: date-time
-            example: '2026-08-03T10:00:00.000Z'
-
-MessageResponse:
-    type: object
-    required:
-        - ok
-        - message
-    properties:
-        ok:
-            type: boolean
-            example: true
-
-        message:
-            type: string
-            example: SUCCESS
+            description: Present after an OAuth callback; true when a new account was created.
 
 AuthBannedResponse:
     type: object
     required:
         - ok
         - banned
+        - error
     properties:
         ok:
             type: boolean
-            example: false
+            const: false
         banned:
             type: boolean
-            example: true
+            const: true
         error:
             type: string
-            example: USER_BANNED
+            const: USER_BANNED
 
-EmailNotVerifiedResponse:
+AuthUser:
     type: object
     required:
-        - ok
-        - error
-        - canResend
+        - id
+        - theme
+        - status
+        - termsAccepted
+        - createdAt
+        - providers
     properties:
-        ok:
-            type: boolean
-            example: false
-        error:
+        id:
             type: string
-            example: EMAIL_NOT_VERIFIED
-        canResend:
+            format: uuid
+            example: 019e3858-fdaa-7728-b8f5-990013a67f1d
+        username:
+            type:
+                - string
+                - 'null'
+            maxLength: 32
+            example: stepazavrik
+        firstName:
+            type:
+                - string
+                - 'null'
+            maxLength: 100
+        lastName:
+            type:
+                - string
+                - 'null'
+            maxLength: 100
+        gender:
+            type:
+                - string
+                - 'null'
+            enum:
+                - MALE
+                - FEMALE
+                - OTHER
+                - null
+        birthDate:
+            type:
+                - string
+                - 'null'
+            format: date-time
+        photoUrl:
+            type:
+                - string
+                - 'null'
+            format: uri
+        email:
+            type:
+                - string
+                - 'null'
+            format: email
+        emailVerifiedAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+        languageCode:
+            type:
+                - string
+                - 'null'
+            maxLength: 35
+            example: ru
+        theme:
+            type: string
+            enum:
+                - LIGHT
+                - DARK
+                - SYSTEM
+        status:
+            type: string
+            enum:
+                - GUEST
+                - REGISTERED
+        termsAccepted:
             type: boolean
-            example: true
+        createdAt:
+            type: string
+            format: date-time
+        providers:
+            type: array
+            description: OAuth identities linked to this account.
+            items:
+                $ref: '#/OAuthProvider'
+
+OAuthProvider:
+    type: object
+    required:
+        - provider
+        - providerUserId
+    properties:
+        provider:
+            type: string
+            example: yandex
+        providerUserId:
+            type: string
+            example: '1234567890'
 
 LogoutSuccessResponse:
     type: object
@@ -289,4 +137,4 @@ LogoutSuccessResponse:
     properties:
         ok:
             type: boolean
-            example: true
+            const: true

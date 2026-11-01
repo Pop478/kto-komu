@@ -1,0 +1,196 @@
+.shell {
+    min-height: 100dvh;
+    color: var(--color-gray-900);
+    background: var(--color-gray-000);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xl);
+    min-height: var(--header-height);
+    padding: 0 max(var(--space-2xl), calc((100vw - var(--container-width)) / 2));
+    background: var(--color-gray-800);
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.brand {
+}
+
+.brandMark {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: var(--color-gray-800);
+    background: var(--color-brand-300);
+    border-radius: var(--radius-md);
+}
+
+.desktopNavigation {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+}
+
+.desktopLink,
+.mobileLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    color: var(--color-gray-600);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition:
+        color var(--transition-normal),
+        background-color var(--transition-normal),
+        transform var(--transition-fast);
+}
+
+.desktopLink {
+    min-height: 40px;
+    padding: 0 var(--space-lg);
+    border-radius: var(--radius-md);
+}
+
+.desktopLink:hover {
+    color: var(--color-brand-300);
+    background: var(--color-brand-900);
+}
+.icon {
+    width: 20px;
+    height: 20px;
+    color: currentColor;
+    transition:
+        color var(--transition-normal),
+        transform var(--transition-normal);
+}
+
+.avatar,
+.avatarFallback {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+}
+
+.avatar {
+    object-fit: cover;
+}
+.avatarFallback {
+    display: grid;
+    place-items: center;
+    color: var(--color-gray-800);
+    font-size: var(--font-size-label-sm);
+    background: var(--color-gray-500);
+}
+.active {
+    color: var(--color-brand-300);
+}
+.desktopLink.active {
+    background: var(--color-brand-900);
+}
+/* .active .icon {
+    transform: scale(1.08);
+} */
+
+.addExpense {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    min-height: 40px;
+    margin-left: auto;
+    padding: 0 var(--space-lg);
+    color: var(--color-gray-800);
+    font-weight: var(--font-weight-bold);
+    text-decoration: none;
+    background: var(--color-brand-300);
+    border-radius: var(--radius-md);
+    transition:
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.addExpense:hover {
+    background: var(--color-brand-200);
+    transform: translateY(-1px);
+}
+.content {
+    width: min(var(--container-width), calc(100% - 48px));
+    margin: 0 auto;
+    padding: var(--space-4xl) 0 64px;
+}
+.mobileNavigation {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .header {
+        display: none;
+        /* min-height: 60px;
+        padding: 0 var(--space-lg); */
+    }
+    .brand {
+        font-size: var(--font-size-text-lg);
+    }
+    .brandMark {
+        width: 28px;
+        height: 28px;
+    }
+    .desktopNavigation,
+    .addExpense {
+        display: none;
+    }
+    .content {
+        width: min(100% - 32px, var(--container-width));
+        padding: var(--space-2xl) 0 88px;
+    }
+
+    .mobileNavigation {
+        position: fixed;
+        z-index: 100;
+        right: 0;
+        bottom: 16px;
+        left: 0;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        width: min(100% - 32px, var(--container-width));
+        margin-inline: auto;
+        padding: var(--space-xs) var(--space-md)
+            max(var(--space-xs), env(safe-area-inset-bottom));
+
+        background: rgba(30, 30, 30, 0.14);
+        border-top: 1px solid var(--color-gray-100);
+        border-radius: 48px;
+        backdrop-filter: blur(10px);
+    }
+
+    .mobileLink {
+        flex-direction: column;
+        min-height: 52px;
+        padding: var(--space-3xs);
+        font-size: 10px;
+    }
+    .mobileLink .icon {
+        width: 22px;
+        height: 22px;
+    }
+    .mobileLink .avatar,
+    .mobileLink .avatarFallback {
+        width: 24px;
+        height: 24px;
+    }
+    .mobileLink.active {
+        color: var(--color-brand-400);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .desktopLink,
+    .mobileLink,
+    .icon,
+    .addExpense {
+        transition: none;
+    }
+}

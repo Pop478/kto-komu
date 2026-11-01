@@ -1,31 +1,51 @@
-model account {
-  id                    String      @id @default(uuid(7)) @db.Uuid
-  username              String?     @db.VarChar(255)
-  first_name            String?     @db.VarChar(255)
-  last_name             String?     @db.VarChar(255)
-  languageCode          String?     @db.VarChar(10)   
-  photo_url             String?
-  role                  UserRole    @default(user)
-  theme                 UserTheme   @default(dark)
-  ban                   Boolean     @default(false)
-  is_active             Boolean     @default(true)
-  termsAccepted         Boolean     @default(false)
-  registeredFromBotId   String?     @db.Uuid
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
+model Account {
+  id                 String        @id @default(uuid(7)) @map("account_id") @db.Uuid
+  username           String?       @db.VarChar(32)
+  firstName          String?       @map("first_name") @db.VarChar(100)
+  lastName           String?       @map("last_name") @db.VarChar(100)
+  gender             Gender?
+  birthDate          DateTime?     @map("birth_date") @db.Date
+  photoUrl           String?       @map("photo_url") @db.Text
+  email              String?       @db.VarChar(254)
+  emailVerifiedAt    DateTime?     @map("email_verified_at") @db.Timestamptz(3)
+  languageCode       String?       @map("language_code") @db.VarChar(35)
+  theme              UserTheme     @default(SYSTEM)
+  status             AccountStatus @default(GUEST)
+  isBanned           Boolean       @default(false) @map("is_banned")
+  isActive           Boolean       @default(true) @map("is_active")
+  termsAccepted      Boolean       @default(false) @map("terms_accepted")
+  termsAcceptedAt    DateTime?     @map("terms_accepted_at") @db.Timestamptz(3)
+  termsVersion       String?       @map("terms_version") @db.VarChar(32)
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
 
-  @@index([username])
+  oauthIdentities    OAuthIdentity[]
+  passwordCredential PasswordCredential?
+  groupMembers       GroupMember[]
+
+  @@index([status, createdAt])
+  @@map("account")
 }
 
-enum UserRole {
-  user
-  manager
-  admin
+enum AccountStatus {
+  GUEST      @map("guest")
+  REGISTERED @map("registered")
+
+  @@map("account_status")
 }
 
 enum UserTheme {
-  light
-  dark
-  system
+  LIGHT  @map("light")
+  DARK   @map("dark")
+  SYSTEM @map("system")
+
+  @@map("user_theme")
 }
 
+enum Gender {
+  MALE              @map("male")
+  FEMALE            @map("female")
+  OTHER             @map("other")
+
+  @@map("gender")
+}

@@ -51,7 +51,11 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  account: 'account'
+  OAuthIdentity: 'OAuthIdentity',
+  PasswordCredential: 'PasswordCredential',
+  Account: 'Account',
+  Group: 'Group',
+  GroupMember: 'GroupMember'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -70,24 +74,71 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const OAuthIdentityScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  provider: 'provider',
+  providerUserId: 'providerUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type OAuthIdentityScalarFieldEnum = (typeof OAuthIdentityScalarFieldEnum)[keyof typeof OAuthIdentityScalarFieldEnum]
+
+
+export const PasswordCredentialScalarFieldEnum = {
+  accountId: 'accountId',
+  passwordHash: 'passwordHash',
+  passwordUpdatedAt: 'passwordUpdatedAt'
+} as const
+
+export type PasswordCredentialScalarFieldEnum = (typeof PasswordCredentialScalarFieldEnum)[keyof typeof PasswordCredentialScalarFieldEnum]
+
+
 export const AccountScalarFieldEnum = {
   id: 'id',
   username: 'username',
-  first_name: 'first_name',
-  last_name: 'last_name',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  gender: 'gender',
+  birthDate: 'birthDate',
+  photoUrl: 'photoUrl',
+  email: 'email',
+  emailVerifiedAt: 'emailVerifiedAt',
   languageCode: 'languageCode',
-  photo_url: 'photo_url',
-  role: 'role',
   theme: 'theme',
-  ban: 'ban',
-  is_active: 'is_active',
+  status: 'status',
+  isBanned: 'isBanned',
+  isActive: 'isActive',
   termsAccepted: 'termsAccepted',
-  registeredFromBotId: 'registeredFromBotId',
+  termsAcceptedAt: 'termsAcceptedAt',
+  termsVersion: 'termsVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const GroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
+
+
+export const GroupMemberScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  accountId: 'accountId',
+  displayName: 'displayName',
+  role: 'role',
+  joinedAt: 'joinedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type GroupMemberScalarFieldEnum = (typeof GroupMemberScalarFieldEnum)[keyof typeof GroupMemberScalarFieldEnum]
 
 
 export const SortOrder = {

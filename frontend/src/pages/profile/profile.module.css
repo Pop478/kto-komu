@@ -1,0 +1,21 @@
+.page { display: grid; gap: var(--space-xl); }
+.loading, .empty { display: grid; min-height: 280px; place-items: center; align-content: center; gap: var(--space-lg); text-align: center; }
+.empty p, .muted, .username, .eyebrow { margin: 0; color: var(--color-gray-600); }
+.empty h1, .profileHeader h1, .card h2 { margin: 0; }
+.profileHeader { display: flex; align-items: center; gap: var(--space-lg); padding: var(--space-xl); background: var(--color-gray-800); border: 1px solid var(--color-gray-100); border-radius: var(--radius-lg); }
+.profileHeader h1 { font-size: var(--font-size-display-lg); }
+.eyebrow { margin-bottom: var(--space-3xs); font-size: var(--font-size-label-sm); font-weight: var(--font-weight-semibold); }
+.username { margin-top: var(--space-3xs); }
+.avatar, .avatarFallback { width: 72px; height: 72px; border-radius: var(--radius-full); }
+.avatar { object-fit: cover; }
+.avatarFallback { display: grid; place-items: center; color: var(--color-gray-800); font-size: var(--font-size-display-lg); font-weight: var(--font-weight-bold); background: var(--color-brand-300); }
+.logout { margin-left: auto; }
+.card { padding: var(--space-xl); background: var(--color-gray-800); border: 1px solid var(--color-gray-100); border-radius: var(--radius-lg); }
+.card h2 { margin-bottom: var(--space-lg); font-size: var(--font-size-display-xs); }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); margin: 0; }
+.field { min-width: 0; }
+.field dt { margin-bottom: var(--space-3xs); color: var(--color-gray-600); font-size: var(--font-size-label-sm); }
+.field dd { margin: 0; overflow-wrap: anywhere; font-weight: var(--font-weight-semibold); }
+.providers { display: flex; flex-wrap: wrap; gap: var(--space-md); padding: 0; margin: 0; list-style: none; }
+.providers li { padding: var(--space-xs) var(--space-md); color: var(--color-brand-100); font-weight: var(--font-weight-semibold); background: var(--color-brand-900); border-radius: var(--radius-full); }
+@media (max-width: 600px) { .profileHeader { flex-wrap: wrap; padding: var(--space-lg); } .profileHeader h1 { font-size: var(--font-size-display-md); } .logout { width: 100%; margin-left: 0; } .fields { grid-template-columns: 1fr; gap: var(--space-md); } .card { padding: var(--space-lg); } }

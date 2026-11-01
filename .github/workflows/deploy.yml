@@ -1,0 +1,44 @@
+name: KK CI/CD
+
+on:
+    push:
+        branches:
+            - prod
+
+    workflow_dispatch:
+
+concurrency:
+    group: kk-production
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        name: Build and Deploy
+        runs-on: self-hosted
+        timeout-minutes: 60
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - name: Prepare deployment directory
+              run: |
+                  mkdir -p /opt/kk
+            - name: Copy project files
+              run: |
+                  rsync -av --delete \
+                    --exclude='.git' \
+                    --exclude='.env' \
+                    --exclude='Backend/.env' \
+                    --exclude='node_modules' \
+                    --exclude='/letsencrypt/'
+                    ./ /opt/kk/
+            - name: Build Docker images
+              working-directory: /opt/kk
+              run: |
+                  docker compose build
+            - name: Deploy containers
+              working-directory: /opt/kk
+              run: |
+                  docker compose up -d --remove-orphans --no-build
+            - name: Cleanup old Docker images
+              run: |
+                  docker image prune -f

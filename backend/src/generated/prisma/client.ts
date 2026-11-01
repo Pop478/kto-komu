@@ -31,8 +31,8 @@ export * from "./enums.js"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Accounts
- * const accounts = await prisma.account.findMany()
+ * // Fetch zero or more OAuthIdentities
+ * const oAuthIdentities = await prisma.oAuthIdentity.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,7 +42,27 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model account
+ * Model OAuthIdentity
  * 
  */
-export type account = Prisma.accountModel
+export type OAuthIdentity = Prisma.OAuthIdentityModel
+/**
+ * Model PasswordCredential
+ * 
+ */
+export type PasswordCredential = Prisma.PasswordCredentialModel
+/**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
+/**
+ * Model Group
+ * 
+ */
+export type Group = Prisma.GroupModel
+/**
+ * Model GroupMember
+ * 
+ */
+export type GroupMember = Prisma.GroupMemberModel

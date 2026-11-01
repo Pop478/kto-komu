@@ -1,0 +1,120 @@
+AuthSuccess:
+    description: Успешная авторизация
+    content:
+        application/json:
+            schema:
+                type: object
+                additionalProperties: false
+                properties:
+                    ok:
+                        type: boolean
+                    id:
+                        type: string
+                        format: uuid
+                    telegramId:
+                        type: string
+                    username:
+                        type: string
+                    languageCode:
+                        type: string
+                    photo_url:
+                        type: string
+                        format: uri
+                    frame_url:
+                        type: string
+                        format: uri
+                    registration:
+                        type: boolean
+                    collectibleCard:
+                        type:
+                            - 'null'
+                            - object
+                    avatarFrame:
+                        type:
+                            - 'null'
+                            - object
+                required:
+                    - ok
+                    - id
+                    - telegramId
+                    - username
+                    - languageCode
+                    - photo_url
+                    - frame_url
+                    - registration
+                    - collectibleCard
+                    - avatarFrame
+
+BadRequest:
+    description: Неверный запрос
+    content:
+        application/json:
+            schema:
+                type: object
+                additionalProperties: false
+                properties:
+                    error:
+                        type: string
+
+Unauthorized:
+    description: Неавторизован
+    content:
+        application/json:
+            schema:
+                type: object
+                additionalProperties: false
+                properties:
+                    message:
+                        type: string
+
+NotFound:
+    description: Сущность не найдена
+    content:
+        application/json:
+            schema:
+                type: object
+                additionalProperties: false
+                properties:
+                    error:
+                        type: string
+                required:
+                    - error
+
+InternalServerError:
+    description: Внутренняя ошибка сервера
+    content:
+        application/json:
+            schema:
+                type: object
+                additionalProperties: false
+                properties:
+                    error:
+                        type: string
+                required:
+                    - error
+
+Forbidden:
+    description: Доступ запрещён
+    content:
+        application/json:
+            schema:
+                type: object
+                additionalProperties: false
+                properties:
+                    error:
+                        type: string
+                required:
+                    - error
+
+Conflict:
+    description: Конфликт данных
+    content:
+        application/json:
+            schema:
+                type: object
+                additionalProperties: false
+                properties:
+                    error:
+                        type: string
+                required:
+                    - error

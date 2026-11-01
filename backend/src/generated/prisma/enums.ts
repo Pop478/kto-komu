@@ -9,19 +9,36 @@
 * 🟢 You can import this file directly.
 */
 
-export const UserRole = {
-  user: 'user',
-  manager: 'manager',
-  admin: 'admin'
+export const AccountStatus = {
+  GUEST: 'GUEST',
+  REGISTERED: 'REGISTERED'
 } as const
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+export type AccountStatus = (typeof AccountStatus)[keyof typeof AccountStatus]
 
 
 export const UserTheme = {
-  light: 'light',
-  dark: 'dark',
-  system: 'system'
+  LIGHT: 'LIGHT',
+  DARK: 'DARK',
+  SYSTEM: 'SYSTEM'
 } as const
 
 export type UserTheme = (typeof UserTheme)[keyof typeof UserTheme]
+
+
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const GroupRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+} as const
+
+export type GroupRole = (typeof GroupRole)[keyof typeof GroupRole]

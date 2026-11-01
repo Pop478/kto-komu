@@ -4,7 +4,7 @@
 // biome-ignore-all lint: generated file
 // @ts-nocheck 
 /*
- * This file exports the `account` model and its related types.
+ * This file exports the `Account` model and its related types.
  *
  * 🟢 You can import this file directly.
  */
@@ -13,10 +13,10 @@ import type * as $Enums from "../enums.js"
 import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
- * Model account
+ * Model Account
  * 
  */
-export type accountModel = runtime.Types.Result.DefaultSelection<Prisma.$accountPayload>
+export type AccountModel = runtime.Types.Result.DefaultSelection<Prisma.$AccountPayload>
 
 export type AggregateAccount = {
   _count: AccountCountAggregateOutputType | null
@@ -27,16 +27,21 @@ export type AggregateAccount = {
 export type AccountMinAggregateOutputType = {
   id: string | null
   username: string | null
-  first_name: string | null
-  last_name: string | null
+  firstName: string | null
+  lastName: string | null
+  gender: $Enums.Gender | null
+  birthDate: Date | null
+  photoUrl: string | null
+  email: string | null
+  emailVerifiedAt: Date | null
   languageCode: string | null
-  photo_url: string | null
-  role: $Enums.UserRole | null
   theme: $Enums.UserTheme | null
-  ban: boolean | null
-  is_active: boolean | null
+  status: $Enums.AccountStatus | null
+  isBanned: boolean | null
+  isActive: boolean | null
   termsAccepted: boolean | null
-  registeredFromBotId: string | null
+  termsAcceptedAt: Date | null
+  termsVersion: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,16 +49,21 @@ export type AccountMinAggregateOutputType = {
 export type AccountMaxAggregateOutputType = {
   id: string | null
   username: string | null
-  first_name: string | null
-  last_name: string | null
+  firstName: string | null
+  lastName: string | null
+  gender: $Enums.Gender | null
+  birthDate: Date | null
+  photoUrl: string | null
+  email: string | null
+  emailVerifiedAt: Date | null
   languageCode: string | null
-  photo_url: string | null
-  role: $Enums.UserRole | null
   theme: $Enums.UserTheme | null
-  ban: boolean | null
-  is_active: boolean | null
+  status: $Enums.AccountStatus | null
+  isBanned: boolean | null
+  isActive: boolean | null
   termsAccepted: boolean | null
-  registeredFromBotId: string | null
+  termsAcceptedAt: Date | null
+  termsVersion: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,16 +71,21 @@ export type AccountMaxAggregateOutputType = {
 export type AccountCountAggregateOutputType = {
   id: number
   username: number
-  first_name: number
-  last_name: number
+  firstName: number
+  lastName: number
+  gender: number
+  birthDate: number
+  photoUrl: number
+  email: number
+  emailVerifiedAt: number
   languageCode: number
-  photo_url: number
-  role: number
   theme: number
-  ban: number
-  is_active: number
+  status: number
+  isBanned: number
+  isActive: number
   termsAccepted: number
-  registeredFromBotId: number
+  termsAcceptedAt: number
+  termsVersion: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -80,16 +95,21 @@ export type AccountCountAggregateOutputType = {
 export type AccountMinAggregateInputType = {
   id?: true
   username?: true
-  first_name?: true
-  last_name?: true
+  firstName?: true
+  lastName?: true
+  gender?: true
+  birthDate?: true
+  photoUrl?: true
+  email?: true
+  emailVerifiedAt?: true
   languageCode?: true
-  photo_url?: true
-  role?: true
   theme?: true
-  ban?: true
-  is_active?: true
+  status?: true
+  isBanned?: true
+  isActive?: true
   termsAccepted?: true
-  registeredFromBotId?: true
+  termsAcceptedAt?: true
+  termsVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -97,16 +117,21 @@ export type AccountMinAggregateInputType = {
 export type AccountMaxAggregateInputType = {
   id?: true
   username?: true
-  first_name?: true
-  last_name?: true
+  firstName?: true
+  lastName?: true
+  gender?: true
+  birthDate?: true
+  photoUrl?: true
+  email?: true
+  emailVerifiedAt?: true
   languageCode?: true
-  photo_url?: true
-  role?: true
   theme?: true
-  ban?: true
-  is_active?: true
+  status?: true
+  isBanned?: true
+  isActive?: true
   termsAccepted?: true
-  registeredFromBotId?: true
+  termsAcceptedAt?: true
+  termsVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -114,16 +139,21 @@ export type AccountMaxAggregateInputType = {
 export type AccountCountAggregateInputType = {
   id?: true
   username?: true
-  first_name?: true
-  last_name?: true
+  firstName?: true
+  lastName?: true
+  gender?: true
+  birthDate?: true
+  photoUrl?: true
+  email?: true
+  emailVerifiedAt?: true
   languageCode?: true
-  photo_url?: true
-  role?: true
   theme?: true
-  ban?: true
-  is_active?: true
+  status?: true
+  isBanned?: true
+  isActive?: true
   termsAccepted?: true
-  registeredFromBotId?: true
+  termsAcceptedAt?: true
+  termsVersion?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -131,37 +161,37 @@ export type AccountCountAggregateInputType = {
 
 export type AccountAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which account to aggregate.
+   * Filter which Account to aggregate.
    */
-  where?: Prisma.accountWhereInput
+  where?: Prisma.AccountWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of accounts to fetch.
+   * Determine the order of Accounts to fetch.
    */
-  orderBy?: Prisma.accountOrderByWithRelationInput | Prisma.accountOrderByWithRelationInput[]
+  orderBy?: Prisma.AccountOrderByWithRelationInput | Prisma.AccountOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
    * Sets the start position
    */
-  cursor?: Prisma.accountWhereUniqueInput
+  cursor?: Prisma.AccountWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` accounts from the position of the cursor.
+   * Take `±n` Accounts from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` accounts.
+   * Skip the first `n` Accounts.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Count returned accounts
+   * Count returned Accounts
   **/
   _count?: true | AccountCountAggregateInputType
   /**
@@ -189,11 +219,11 @@ export type GetAccountAggregateType<T extends AccountAggregateArgs> = {
 
 
 
-export type accountGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.accountWhereInput
-  orderBy?: Prisma.accountOrderByWithAggregationInput | Prisma.accountOrderByWithAggregationInput[]
+export type AccountGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountWhereInput
+  orderBy?: Prisma.AccountOrderByWithAggregationInput | Prisma.AccountOrderByWithAggregationInput[]
   by: Prisma.AccountScalarFieldEnum[] | Prisma.AccountScalarFieldEnum
-  having?: Prisma.accountScalarWhereWithAggregatesInput
+  having?: Prisma.AccountScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AccountCountAggregateInputType | true
@@ -204,16 +234,21 @@ export type accountGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type AccountGroupByOutputType = {
   id: string
   username: string | null
-  first_name: string | null
-  last_name: string | null
+  firstName: string | null
+  lastName: string | null
+  gender: $Enums.Gender | null
+  birthDate: Date | null
+  photoUrl: string | null
+  email: string | null
+  emailVerifiedAt: Date | null
   languageCode: string | null
-  photo_url: string | null
-  role: $Enums.UserRole
   theme: $Enums.UserTheme
-  ban: boolean
-  is_active: boolean
+  status: $Enums.AccountStatus
+  isBanned: boolean
+  isActive: boolean
   termsAccepted: boolean
-  registeredFromBotId: string | null
+  termsAcceptedAt: Date | null
+  termsVersion: string | null
   createdAt: Date
   updatedAt: Date
   _count: AccountCountAggregateOutputType | null
@@ -221,7 +256,7 @@ export type AccountGroupByOutputType = {
   _max: AccountMaxAggregateOutputType | null
 }
 
-export type GetAccountGroupByPayload<T extends accountGroupByArgs> = Prisma.PrismaPromise<
+export type GetAccountGroupByPayload<T extends AccountGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AccountGroupByOutputType, T['by']> &
       {
@@ -236,403 +271,968 @@ export type GetAccountGroupByPayload<T extends accountGroupByArgs> = Prisma.Pris
 
 
 
-export type accountWhereInput = {
-  AND?: Prisma.accountWhereInput | Prisma.accountWhereInput[]
-  OR?: Prisma.accountWhereInput[]
-  NOT?: Prisma.accountWhereInput | Prisma.accountWhereInput[]
-  id?: Prisma.UuidFilter<"account"> | string
-  username?: Prisma.StringNullableFilter<"account"> | string | null
-  first_name?: Prisma.StringNullableFilter<"account"> | string | null
-  last_name?: Prisma.StringNullableFilter<"account"> | string | null
-  languageCode?: Prisma.StringNullableFilter<"account"> | string | null
-  photo_url?: Prisma.StringNullableFilter<"account"> | string | null
-  role?: Prisma.EnumUserRoleFilter<"account"> | $Enums.UserRole
-  theme?: Prisma.EnumUserThemeFilter<"account"> | $Enums.UserTheme
-  ban?: Prisma.BoolFilter<"account"> | boolean
-  is_active?: Prisma.BoolFilter<"account"> | boolean
-  termsAccepted?: Prisma.BoolFilter<"account"> | boolean
-  registeredFromBotId?: Prisma.UuidNullableFilter<"account"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"account"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"account"> | Date | string
+export type AccountWhereInput = {
+  AND?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
+  OR?: Prisma.AccountWhereInput[]
+  NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
+  id?: Prisma.UuidFilter<"Account"> | string
+  username?: Prisma.StringNullableFilter<"Account"> | string | null
+  firstName?: Prisma.StringNullableFilter<"Account"> | string | null
+  lastName?: Prisma.StringNullableFilter<"Account"> | string | null
+  gender?: Prisma.EnumGenderNullableFilter<"Account"> | $Enums.Gender | null
+  birthDate?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  photoUrl?: Prisma.StringNullableFilter<"Account"> | string | null
+  email?: Prisma.StringNullableFilter<"Account"> | string | null
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  languageCode?: Prisma.StringNullableFilter<"Account"> | string | null
+  theme?: Prisma.EnumUserThemeFilter<"Account"> | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFilter<"Account"> | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFilter<"Account"> | boolean
+  isActive?: Prisma.BoolFilter<"Account"> | boolean
+  termsAccepted?: Prisma.BoolFilter<"Account"> | boolean
+  termsAcceptedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  termsVersion?: Prisma.StringNullableFilter<"Account"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityListRelationFilter
+  passwordCredential?: Prisma.XOR<Prisma.PasswordCredentialNullableScalarRelationFilter, Prisma.PasswordCredentialWhereInput> | null
+  groupMembers?: Prisma.GroupMemberListRelationFilter
 }
 
-export type accountOrderByWithRelationInput = {
+export type AccountOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
-  first_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  last_name?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstName?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
+  birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  photoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   languageCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  photo_url?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
   theme?: Prisma.SortOrder
-  ban?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isBanned?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   termsAccepted?: Prisma.SortOrder
-  registeredFromBotId?: Prisma.SortOrderInput | Prisma.SortOrder
+  termsAcceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  termsVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  oauthIdentities?: Prisma.OAuthIdentityOrderByRelationAggregateInput
+  passwordCredential?: Prisma.PasswordCredentialOrderByWithRelationInput
+  groupMembers?: Prisma.GroupMemberOrderByRelationAggregateInput
 }
 
-export type accountWhereUniqueInput = Prisma.AtLeast<{
+export type AccountWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  AND?: Prisma.accountWhereInput | Prisma.accountWhereInput[]
-  OR?: Prisma.accountWhereInput[]
-  NOT?: Prisma.accountWhereInput | Prisma.accountWhereInput[]
-  username?: Prisma.StringNullableFilter<"account"> | string | null
-  first_name?: Prisma.StringNullableFilter<"account"> | string | null
-  last_name?: Prisma.StringNullableFilter<"account"> | string | null
-  languageCode?: Prisma.StringNullableFilter<"account"> | string | null
-  photo_url?: Prisma.StringNullableFilter<"account"> | string | null
-  role?: Prisma.EnumUserRoleFilter<"account"> | $Enums.UserRole
-  theme?: Prisma.EnumUserThemeFilter<"account"> | $Enums.UserTheme
-  ban?: Prisma.BoolFilter<"account"> | boolean
-  is_active?: Prisma.BoolFilter<"account"> | boolean
-  termsAccepted?: Prisma.BoolFilter<"account"> | boolean
-  registeredFromBotId?: Prisma.UuidNullableFilter<"account"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"account"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"account"> | Date | string
+  AND?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
+  OR?: Prisma.AccountWhereInput[]
+  NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
+  username?: Prisma.StringNullableFilter<"Account"> | string | null
+  firstName?: Prisma.StringNullableFilter<"Account"> | string | null
+  lastName?: Prisma.StringNullableFilter<"Account"> | string | null
+  gender?: Prisma.EnumGenderNullableFilter<"Account"> | $Enums.Gender | null
+  birthDate?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  photoUrl?: Prisma.StringNullableFilter<"Account"> | string | null
+  email?: Prisma.StringNullableFilter<"Account"> | string | null
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  languageCode?: Prisma.StringNullableFilter<"Account"> | string | null
+  theme?: Prisma.EnumUserThemeFilter<"Account"> | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFilter<"Account"> | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFilter<"Account"> | boolean
+  isActive?: Prisma.BoolFilter<"Account"> | boolean
+  termsAccepted?: Prisma.BoolFilter<"Account"> | boolean
+  termsAcceptedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  termsVersion?: Prisma.StringNullableFilter<"Account"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityListRelationFilter
+  passwordCredential?: Prisma.XOR<Prisma.PasswordCredentialNullableScalarRelationFilter, Prisma.PasswordCredentialWhereInput> | null
+  groupMembers?: Prisma.GroupMemberListRelationFilter
 }, "id">
 
-export type accountOrderByWithAggregationInput = {
+export type AccountOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
-  first_name?: Prisma.SortOrderInput | Prisma.SortOrder
-  last_name?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstName?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrderInput | Prisma.SortOrder
+  birthDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  photoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   languageCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  photo_url?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrder
   theme?: Prisma.SortOrder
-  ban?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isBanned?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   termsAccepted?: Prisma.SortOrder
-  registeredFromBotId?: Prisma.SortOrderInput | Prisma.SortOrder
+  termsAcceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  termsVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.accountCountOrderByAggregateInput
-  _max?: Prisma.accountMaxOrderByAggregateInput
-  _min?: Prisma.accountMinOrderByAggregateInput
+  _count?: Prisma.AccountCountOrderByAggregateInput
+  _max?: Prisma.AccountMaxOrderByAggregateInput
+  _min?: Prisma.AccountMinOrderByAggregateInput
 }
 
-export type accountScalarWhereWithAggregatesInput = {
-  AND?: Prisma.accountScalarWhereWithAggregatesInput | Prisma.accountScalarWhereWithAggregatesInput[]
-  OR?: Prisma.accountScalarWhereWithAggregatesInput[]
-  NOT?: Prisma.accountScalarWhereWithAggregatesInput | Prisma.accountScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"account"> | string
-  username?: Prisma.StringNullableWithAggregatesFilter<"account"> | string | null
-  first_name?: Prisma.StringNullableWithAggregatesFilter<"account"> | string | null
-  last_name?: Prisma.StringNullableWithAggregatesFilter<"account"> | string | null
-  languageCode?: Prisma.StringNullableWithAggregatesFilter<"account"> | string | null
-  photo_url?: Prisma.StringNullableWithAggregatesFilter<"account"> | string | null
-  role?: Prisma.EnumUserRoleWithAggregatesFilter<"account"> | $Enums.UserRole
-  theme?: Prisma.EnumUserThemeWithAggregatesFilter<"account"> | $Enums.UserTheme
-  ban?: Prisma.BoolWithAggregatesFilter<"account"> | boolean
-  is_active?: Prisma.BoolWithAggregatesFilter<"account"> | boolean
-  termsAccepted?: Prisma.BoolWithAggregatesFilter<"account"> | boolean
-  registeredFromBotId?: Prisma.UuidNullableWithAggregatesFilter<"account"> | string | null
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"account"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"account"> | Date | string
+export type AccountScalarWhereWithAggregatesInput = {
+  AND?: Prisma.AccountScalarWhereWithAggregatesInput | Prisma.AccountScalarWhereWithAggregatesInput[]
+  OR?: Prisma.AccountScalarWhereWithAggregatesInput[]
+  NOT?: Prisma.AccountScalarWhereWithAggregatesInput | Prisma.AccountScalarWhereWithAggregatesInput[]
+  id?: Prisma.UuidWithAggregatesFilter<"Account"> | string
+  username?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  firstName?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  lastName?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  gender?: Prisma.EnumGenderNullableWithAggregatesFilter<"Account"> | $Enums.Gender | null
+  birthDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
+  photoUrl?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  email?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
+  languageCode?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  theme?: Prisma.EnumUserThemeWithAggregatesFilter<"Account"> | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusWithAggregatesFilter<"Account"> | $Enums.AccountStatus
+  isBanned?: Prisma.BoolWithAggregatesFilter<"Account"> | boolean
+  isActive?: Prisma.BoolWithAggregatesFilter<"Account"> | boolean
+  termsAccepted?: Prisma.BoolWithAggregatesFilter<"Account"> | boolean
+  termsAcceptedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
+  termsVersion?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
 }
 
-export type accountCreateInput = {
+export type AccountCreateInput = {
   id?: string
   username?: string | null
-  first_name?: string | null
-  last_name?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
   languageCode?: string | null
-  photo_url?: string | null
-  role?: $Enums.UserRole
   theme?: $Enums.UserTheme
-  ban?: boolean
-  is_active?: boolean
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
   termsAccepted?: boolean
-  registeredFromBotId?: string | null
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutAccountInput
+  passwordCredential?: Prisma.PasswordCredentialCreateNestedOneWithoutAccountInput
+  groupMembers?: Prisma.GroupMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutAccountInput
+  passwordCredential?: Prisma.PasswordCredentialUncheckedCreateNestedOneWithoutAccountInput
+  groupMembers?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutAccountNestedInput
+  passwordCredential?: Prisma.PasswordCredentialUpdateOneWithoutAccountNestedInput
+  groupMembers?: Prisma.GroupMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutAccountNestedInput
+  passwordCredential?: Prisma.PasswordCredentialUncheckedUpdateOneWithoutAccountNestedInput
+  groupMembers?: Prisma.GroupMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateManyInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type accountUncheckedCreateInput = {
-  id?: string
-  username?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  languageCode?: string | null
-  photo_url?: string | null
-  role?: $Enums.UserRole
-  theme?: $Enums.UserTheme
-  ban?: boolean
-  is_active?: boolean
-  termsAccepted?: boolean
-  registeredFromBotId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type accountUpdateInput = {
+export type AccountUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
-  ban?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  registeredFromBotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type accountUncheckedUpdateInput = {
+export type AccountUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
-  ban?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  registeredFromBotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type accountCreateManyInput = {
-  id?: string
-  username?: string | null
-  first_name?: string | null
-  last_name?: string | null
-  languageCode?: string | null
-  photo_url?: string | null
-  role?: $Enums.UserRole
-  theme?: $Enums.UserTheme
-  ban?: boolean
-  is_active?: boolean
-  termsAccepted?: boolean
-  registeredFromBotId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
+export type AccountScalarRelationFilter = {
+  is?: Prisma.AccountWhereInput
+  isNot?: Prisma.AccountWhereInput
 }
 
-export type accountUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
-  ban?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  registeredFromBotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type accountUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
-  ban?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  is_active?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  registeredFromBotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type accountCountOrderByAggregateInput = {
+export type AccountCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
-  first_name?: Prisma.SortOrder
-  last_name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
+  photoUrl?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
-  photo_url?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   theme?: Prisma.SortOrder
-  ban?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isBanned?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   termsAccepted?: Prisma.SortOrder
-  registeredFromBotId?: Prisma.SortOrder
+  termsAcceptedAt?: Prisma.SortOrder
+  termsVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type accountMaxOrderByAggregateInput = {
+export type AccountMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
-  first_name?: Prisma.SortOrder
-  last_name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
+  photoUrl?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
-  photo_url?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   theme?: Prisma.SortOrder
-  ban?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isBanned?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   termsAccepted?: Prisma.SortOrder
-  registeredFromBotId?: Prisma.SortOrder
+  termsAcceptedAt?: Prisma.SortOrder
+  termsVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type accountMinOrderByAggregateInput = {
+export type AccountMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
-  first_name?: Prisma.SortOrder
-  last_name?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  birthDate?: Prisma.SortOrder
+  photoUrl?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
-  photo_url?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   theme?: Prisma.SortOrder
-  ban?: Prisma.SortOrder
-  is_active?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isBanned?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   termsAccepted?: Prisma.SortOrder
-  registeredFromBotId?: Prisma.SortOrder
+  termsAcceptedAt?: Prisma.SortOrder
+  termsVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type AccountNullableScalarRelationFilter = {
+  is?: Prisma.AccountWhereInput | null
+  isNot?: Prisma.AccountWhereInput | null
+}
+
+export type AccountCreateNestedOneWithoutOauthIdentitiesInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutOauthIdentitiesInput, Prisma.AccountUncheckedCreateWithoutOauthIdentitiesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutOauthIdentitiesInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutOauthIdentitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutOauthIdentitiesInput, Prisma.AccountUncheckedCreateWithoutOauthIdentitiesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutOauthIdentitiesInput
+  upsert?: Prisma.AccountUpsertWithoutOauthIdentitiesInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutOauthIdentitiesInput, Prisma.AccountUpdateWithoutOauthIdentitiesInput>, Prisma.AccountUncheckedUpdateWithoutOauthIdentitiesInput>
+}
+
+export type AccountCreateNestedOneWithoutPasswordCredentialInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPasswordCredentialInput, Prisma.AccountUncheckedCreateWithoutPasswordCredentialInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPasswordCredentialInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutPasswordCredentialNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutPasswordCredentialInput, Prisma.AccountUncheckedCreateWithoutPasswordCredentialInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutPasswordCredentialInput
+  upsert?: Prisma.AccountUpsertWithoutPasswordCredentialInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutPasswordCredentialInput, Prisma.AccountUpdateWithoutPasswordCredentialInput>, Prisma.AccountUncheckedUpdateWithoutPasswordCredentialInput>
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type EnumUserRoleFieldUpdateOperationsInput = {
-  set?: $Enums.UserRole
+export type NullableEnumGenderFieldUpdateOperationsInput = {
+  set?: $Enums.Gender | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type EnumUserThemeFieldUpdateOperationsInput = {
   set?: $Enums.UserTheme
 }
 
+export type EnumAccountStatusFieldUpdateOperationsInput = {
+  set?: $Enums.AccountStatus
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type AccountCreateNestedOneWithoutGroupMembersInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutGroupMembersInput, Prisma.AccountUncheckedCreateWithoutGroupMembersInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutGroupMembersInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneWithoutGroupMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutGroupMembersInput, Prisma.AccountUncheckedCreateWithoutGroupMembersInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutGroupMembersInput
+  upsert?: Prisma.AccountUpsertWithoutGroupMembersInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutGroupMembersInput, Prisma.AccountUpdateWithoutGroupMembersInput>, Prisma.AccountUncheckedUpdateWithoutGroupMembersInput>
+}
+
+export type AccountCreateWithoutOauthIdentitiesInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordCredential?: Prisma.PasswordCredentialCreateNestedOneWithoutAccountInput
+  groupMembers?: Prisma.GroupMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutOauthIdentitiesInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordCredential?: Prisma.PasswordCredentialUncheckedCreateNestedOneWithoutAccountInput
+  groupMembers?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutOauthIdentitiesInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutOauthIdentitiesInput, Prisma.AccountUncheckedCreateWithoutOauthIdentitiesInput>
+}
+
+export type AccountUpsertWithoutOauthIdentitiesInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutOauthIdentitiesInput, Prisma.AccountUncheckedUpdateWithoutOauthIdentitiesInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutOauthIdentitiesInput, Prisma.AccountUncheckedCreateWithoutOauthIdentitiesInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutOauthIdentitiesInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutOauthIdentitiesInput, Prisma.AccountUncheckedUpdateWithoutOauthIdentitiesInput>
+}
+
+export type AccountUpdateWithoutOauthIdentitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordCredential?: Prisma.PasswordCredentialUpdateOneWithoutAccountNestedInput
+  groupMembers?: Prisma.GroupMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutOauthIdentitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordCredential?: Prisma.PasswordCredentialUncheckedUpdateOneWithoutAccountNestedInput
+  groupMembers?: Prisma.GroupMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutPasswordCredentialInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutAccountInput
+  groupMembers?: Prisma.GroupMemberCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutPasswordCredentialInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutAccountInput
+  groupMembers?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutPasswordCredentialInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPasswordCredentialInput, Prisma.AccountUncheckedCreateWithoutPasswordCredentialInput>
+}
+
+export type AccountUpsertWithoutPasswordCredentialInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutPasswordCredentialInput, Prisma.AccountUncheckedUpdateWithoutPasswordCredentialInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutPasswordCredentialInput, Prisma.AccountUncheckedCreateWithoutPasswordCredentialInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutPasswordCredentialInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutPasswordCredentialInput, Prisma.AccountUncheckedUpdateWithoutPasswordCredentialInput>
+}
+
+export type AccountUpdateWithoutPasswordCredentialInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutAccountNestedInput
+  groupMembers?: Prisma.GroupMemberUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutPasswordCredentialInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutAccountNestedInput
+  groupMembers?: Prisma.GroupMemberUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutGroupMembersInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  oauthIdentities?: Prisma.OAuthIdentityCreateNestedManyWithoutAccountInput
+  passwordCredential?: Prisma.PasswordCredentialCreateNestedOneWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutGroupMembersInput = {
+  id?: string
+  username?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  gender?: $Enums.Gender | null
+  birthDate?: Date | string | null
+  photoUrl?: string | null
+  email?: string | null
+  emailVerifiedAt?: Date | string | null
+  languageCode?: string | null
+  theme?: $Enums.UserTheme
+  status?: $Enums.AccountStatus
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedCreateNestedManyWithoutAccountInput
+  passwordCredential?: Prisma.PasswordCredentialUncheckedCreateNestedOneWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutGroupMembersInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutGroupMembersInput, Prisma.AccountUncheckedCreateWithoutGroupMembersInput>
+}
+
+export type AccountUpsertWithoutGroupMembersInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutGroupMembersInput, Prisma.AccountUncheckedUpdateWithoutGroupMembersInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutGroupMembersInput, Prisma.AccountUncheckedCreateWithoutGroupMembersInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutGroupMembersInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutGroupMembersInput, Prisma.AccountUncheckedUpdateWithoutGroupMembersInput>
+}
+
+export type AccountUpdateWithoutGroupMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUpdateManyWithoutAccountNestedInput
+  passwordCredential?: Prisma.PasswordCredentialUpdateOneWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutGroupMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.EnumUserThemeFieldUpdateOperationsInput | $Enums.UserTheme
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAccepted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  oauthIdentities?: Prisma.OAuthIdentityUncheckedUpdateManyWithoutAccountNestedInput
+  passwordCredential?: Prisma.PasswordCredentialUncheckedUpdateOneWithoutAccountNestedInput
 }
 
 
+/**
+ * Count Type AccountCountOutputType
+ */
 
-export type accountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type AccountCountOutputType = {
+  oauthIdentities: number
+  groupMembers: number
+}
+
+export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  oauthIdentities?: boolean | AccountCountOutputTypeCountOauthIdentitiesArgs
+  groupMembers?: boolean | AccountCountOutputTypeCountGroupMembersArgs
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccountCountOutputType
+   */
+  select?: Prisma.AccountCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountOauthIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OAuthIdentityWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountGroupMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GroupMemberWhereInput
+}
+
+
+export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   username?: boolean
-  first_name?: boolean
-  last_name?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  gender?: boolean
+  birthDate?: boolean
+  photoUrl?: boolean
+  email?: boolean
+  emailVerifiedAt?: boolean
   languageCode?: boolean
-  photo_url?: boolean
-  role?: boolean
   theme?: boolean
-  ban?: boolean
-  is_active?: boolean
+  status?: boolean
+  isBanned?: boolean
+  isActive?: boolean
   termsAccepted?: boolean
-  registeredFromBotId?: boolean
+  termsAcceptedAt?: boolean
+  termsVersion?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  oauthIdentities?: boolean | Prisma.Account$oauthIdentitiesArgs<ExtArgs>
+  passwordCredential?: boolean | Prisma.Account$passwordCredentialArgs<ExtArgs>
+  groupMembers?: boolean | Prisma.Account$groupMembersArgs<ExtArgs>
+  _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["account"]>
+
+export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  username?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  gender?: boolean
+  birthDate?: boolean
+  photoUrl?: boolean
+  email?: boolean
+  emailVerifiedAt?: boolean
+  languageCode?: boolean
+  theme?: boolean
+  status?: boolean
+  isBanned?: boolean
+  isActive?: boolean
+  termsAccepted?: boolean
+  termsAcceptedAt?: boolean
+  termsVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["account"]>
 
-export type accountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   username?: boolean
-  first_name?: boolean
-  last_name?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  gender?: boolean
+  birthDate?: boolean
+  photoUrl?: boolean
+  email?: boolean
+  emailVerifiedAt?: boolean
   languageCode?: boolean
-  photo_url?: boolean
-  role?: boolean
   theme?: boolean
-  ban?: boolean
-  is_active?: boolean
+  status?: boolean
+  isBanned?: boolean
+  isActive?: boolean
   termsAccepted?: boolean
-  registeredFromBotId?: boolean
+  termsAcceptedAt?: boolean
+  termsVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["account"]>
 
-export type accountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type AccountSelectScalar = {
   id?: boolean
   username?: boolean
-  first_name?: boolean
-  last_name?: boolean
+  firstName?: boolean
+  lastName?: boolean
+  gender?: boolean
+  birthDate?: boolean
+  photoUrl?: boolean
+  email?: boolean
+  emailVerifiedAt?: boolean
   languageCode?: boolean
-  photo_url?: boolean
-  role?: boolean
   theme?: boolean
-  ban?: boolean
-  is_active?: boolean
+  status?: boolean
+  isBanned?: boolean
+  isActive?: boolean
   termsAccepted?: boolean
-  registeredFromBotId?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["account"]>
-
-export type accountSelectScalar = {
-  id?: boolean
-  username?: boolean
-  first_name?: boolean
-  last_name?: boolean
-  languageCode?: boolean
-  photo_url?: boolean
-  role?: boolean
-  theme?: boolean
-  ban?: boolean
-  is_active?: boolean
-  termsAccepted?: boolean
-  registeredFromBotId?: boolean
+  termsAcceptedAt?: boolean
+  termsVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type accountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "first_name" | "last_name" | "languageCode" | "photo_url" | "role" | "theme" | "ban" | "is_active" | "termsAccepted" | "registeredFromBotId" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "firstName" | "lastName" | "gender" | "birthDate" | "photoUrl" | "email" | "emailVerifiedAt" | "languageCode" | "theme" | "status" | "isBanned" | "isActive" | "termsAccepted" | "termsAcceptedAt" | "termsVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  oauthIdentities?: boolean | Prisma.Account$oauthIdentitiesArgs<ExtArgs>
+  passwordCredential?: boolean | Prisma.Account$passwordCredentialArgs<ExtArgs>
+  groupMembers?: boolean | Prisma.Account$groupMembersArgs<ExtArgs>
+  _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type AccountIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
-export type $accountPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  name: "account"
-  objects: {}
+export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  name: "Account"
+  objects: {
+    oauthIdentities: Prisma.$OAuthIdentityPayload<ExtArgs>[]
+    passwordCredential: Prisma.$PasswordCredentialPayload<ExtArgs> | null
+    groupMembers: Prisma.$GroupMemberPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     username: string | null
-    first_name: string | null
-    last_name: string | null
+    firstName: string | null
+    lastName: string | null
+    gender: $Enums.Gender | null
+    birthDate: Date | null
+    photoUrl: string | null
+    email: string | null
+    emailVerifiedAt: Date | null
     languageCode: string | null
-    photo_url: string | null
-    role: $Enums.UserRole
     theme: $Enums.UserTheme
-    ban: boolean
-    is_active: boolean
+    status: $Enums.AccountStatus
+    isBanned: boolean
+    isActive: boolean
     termsAccepted: boolean
-    registeredFromBotId: string | null
+    termsAcceptedAt: Date | null
+    termsVersion: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["account"]>
   composites: {}
 }
 
-export type accountGetPayload<S extends boolean | null | undefined | accountDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$accountPayload, S>
+export type AccountGetPayload<S extends boolean | null | undefined | AccountDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$AccountPayload, S>
 
-export type accountCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
-  Omit<accountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type AccountCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
+  Omit<AccountFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
     select?: AccountCountAggregateInputType | true
   }
 
-export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['account'], meta: { name: 'account' } }
+export interface AccountDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Account'], meta: { name: 'Account' } }
   /**
    * Find zero or one Account that matches the filter.
-   * @param {accountFindUniqueArgs} args - Arguments to find a Account
+   * @param {AccountFindUniqueArgs} args - Arguments to find a Account
    * @example
    * // Get one Account
    * const account = await prisma.account.findUnique({
@@ -641,12 +1241,12 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   }
    * })
    */
-  findUnique<T extends accountFindUniqueArgs>(args: Prisma.SelectSubset<T, accountFindUniqueArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findUnique<T extends AccountFindUniqueArgs>(args: Prisma.SelectSubset<T, AccountFindUniqueArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find one Account that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {accountFindUniqueOrThrowArgs} args - Arguments to find a Account
+   * @param {AccountFindUniqueOrThrowArgs} args - Arguments to find a Account
    * @example
    * // Get one Account
    * const account = await prisma.account.findUniqueOrThrow({
@@ -655,13 +1255,13 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   }
    * })
    */
-  findUniqueOrThrow<T extends accountFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, accountFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findUniqueOrThrow<T extends AccountFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, AccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first Account that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {accountFindFirstArgs} args - Arguments to find a Account
+   * @param {AccountFindFirstArgs} args - Arguments to find a Account
    * @example
    * // Get one Account
    * const account = await prisma.account.findFirst({
@@ -670,14 +1270,14 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   }
    * })
    */
-  findFirst<T extends accountFindFirstArgs>(args?: Prisma.SelectSubset<T, accountFindFirstArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findFirst<T extends AccountFindFirstArgs>(args?: Prisma.SelectSubset<T, AccountFindFirstArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first Account that matches the filter or
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {accountFindFirstOrThrowArgs} args - Arguments to find a Account
+   * @param {AccountFindFirstOrThrowArgs} args - Arguments to find a Account
    * @example
    * // Get one Account
    * const account = await prisma.account.findFirstOrThrow({
@@ -686,13 +1286,13 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   }
    * })
    */
-  findFirstOrThrow<T extends accountFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, accountFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findFirstOrThrow<T extends AccountFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, AccountFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find zero or more Accounts that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {accountFindManyArgs} args - Arguments to filter and select certain fields only.
+   * @param {AccountFindManyArgs} args - Arguments to filter and select certain fields only.
    * @example
    * // Get all Accounts
    * const accounts = await prisma.account.findMany()
@@ -704,11 +1304,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * const accountWithIdOnly = await prisma.account.findMany({ select: { id: true } })
    * 
    */
-  findMany<T extends accountFindManyArgs>(args?: Prisma.SelectSubset<T, accountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+  findMany<T extends AccountFindManyArgs>(args?: Prisma.SelectSubset<T, AccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
   /**
    * Create a Account.
-   * @param {accountCreateArgs} args - Arguments to create a Account.
+   * @param {AccountCreateArgs} args - Arguments to create a Account.
    * @example
    * // Create one Account
    * const Account = await prisma.account.create({
@@ -718,11 +1318,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * })
    * 
    */
-  create<T extends accountCreateArgs>(args: Prisma.SelectSubset<T, accountCreateArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  create<T extends AccountCreateArgs>(args: Prisma.SelectSubset<T, AccountCreateArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Create many Accounts.
-   * @param {accountCreateManyArgs} args - Arguments to create many Accounts.
+   * @param {AccountCreateManyArgs} args - Arguments to create many Accounts.
    * @example
    * // Create many Accounts
    * const account = await prisma.account.createMany({
@@ -732,11 +1332,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * })
    *     
    */
-  createMany<T extends accountCreateManyArgs>(args?: Prisma.SelectSubset<T, accountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  createMany<T extends AccountCreateManyArgs>(args?: Prisma.SelectSubset<T, AccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Create many Accounts and returns the data saved in the database.
-   * @param {accountCreateManyAndReturnArgs} args - Arguments to create many Accounts.
+   * @param {AccountCreateManyAndReturnArgs} args - Arguments to create many Accounts.
    * @example
    * // Create many Accounts
    * const account = await prisma.account.createManyAndReturn({
@@ -756,11 +1356,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  createManyAndReturn<T extends accountCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, accountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+  createManyAndReturn<T extends AccountCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, AccountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Delete a Account.
-   * @param {accountDeleteArgs} args - Arguments to delete one Account.
+   * @param {AccountDeleteArgs} args - Arguments to delete one Account.
    * @example
    * // Delete one Account
    * const Account = await prisma.account.delete({
@@ -770,11 +1370,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * })
    * 
    */
-  delete<T extends accountDeleteArgs>(args: Prisma.SelectSubset<T, accountDeleteArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  delete<T extends AccountDeleteArgs>(args: Prisma.SelectSubset<T, AccountDeleteArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Update one Account.
-   * @param {accountUpdateArgs} args - Arguments to update one Account.
+   * @param {AccountUpdateArgs} args - Arguments to update one Account.
    * @example
    * // Update one Account
    * const account = await prisma.account.update({
@@ -787,11 +1387,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * })
    * 
    */
-  update<T extends accountUpdateArgs>(args: Prisma.SelectSubset<T, accountUpdateArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  update<T extends AccountUpdateArgs>(args: Prisma.SelectSubset<T, AccountUpdateArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Delete zero or more Accounts.
-   * @param {accountDeleteManyArgs} args - Arguments to filter Accounts to delete.
+   * @param {AccountDeleteManyArgs} args - Arguments to filter Accounts to delete.
    * @example
    * // Delete a few Accounts
    * const { count } = await prisma.account.deleteMany({
@@ -801,13 +1401,13 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * })
    * 
    */
-  deleteMany<T extends accountDeleteManyArgs>(args?: Prisma.SelectSubset<T, accountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  deleteMany<T extends AccountDeleteManyArgs>(args?: Prisma.SelectSubset<T, AccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more Accounts.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {accountUpdateManyArgs} args - Arguments to update one or more rows.
+   * @param {AccountUpdateManyArgs} args - Arguments to update one or more rows.
    * @example
    * // Update many Accounts
    * const account = await prisma.account.updateMany({
@@ -820,11 +1420,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * })
    * 
    */
-  updateMany<T extends accountUpdateManyArgs>(args: Prisma.SelectSubset<T, accountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  updateMany<T extends AccountUpdateManyArgs>(args: Prisma.SelectSubset<T, AccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more Accounts and returns the data updated in the database.
-   * @param {accountUpdateManyAndReturnArgs} args - Arguments to update many Accounts.
+   * @param {AccountUpdateManyAndReturnArgs} args - Arguments to update many Accounts.
    * @example
    * // Update many Accounts
    * const account = await prisma.account.updateManyAndReturn({
@@ -850,11 +1450,11 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  updateManyAndReturn<T extends accountUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, accountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+  updateManyAndReturn<T extends AccountUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, AccountUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Account.
-   * @param {accountUpsertArgs} args - Arguments to update or create a Account.
+   * @param {AccountUpsertArgs} args - Arguments to update or create a Account.
    * @example
    * // Update or create a Account
    * const account = await prisma.account.upsert({
@@ -869,14 +1469,14 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   }
    * })
    */
-  upsert<T extends accountUpsertArgs>(args: Prisma.SelectSubset<T, accountUpsertArgs<ExtArgs>>): Prisma.Prisma__accountClient<runtime.Types.Result.GetResult<Prisma.$accountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  upsert<T extends AccountUpsertArgs>(args: Prisma.SelectSubset<T, AccountUpsertArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
   /**
    * Count the number of Accounts.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {accountCountArgs} args - Arguments to filter Accounts to count.
+   * @param {AccountCountArgs} args - Arguments to filter Accounts to count.
    * @example
    * // Count the number of Accounts
    * const count = await prisma.account.count({
@@ -885,8 +1485,8 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   }
    * })
   **/
-  count<T extends accountCountArgs>(
-    args?: Prisma.Subset<T, accountCountArgs>,
+  count<T extends AccountCountArgs>(
+    args?: Prisma.Subset<T, AccountCountArgs>,
   ): Prisma.PrismaPromise<
     T extends runtime.Types.Utils.Record<'select', any>
       ? T['select'] extends true
@@ -925,7 +1525,7 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * Group by Account.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {accountGroupByArgs} args - Group by arguments.
+   * @param {AccountGroupByArgs} args - Group by arguments.
    * @example
    * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
@@ -940,14 +1540,14 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * 
   **/
   groupBy<
-    T extends accountGroupByArgs,
+    T extends AccountGroupByArgs,
     HasSelectOrTake extends Prisma.Or<
       Prisma.Extends<'skip', Prisma.Keys<T>>,
       Prisma.Extends<'take', Prisma.Keys<T>>
     >,
     OrderByArg extends Prisma.True extends HasSelectOrTake
-      ? { orderBy: accountGroupByArgs['orderBy'] }
-      : { orderBy?: accountGroupByArgs['orderBy'] },
+      ? { orderBy: AccountGroupByArgs['orderBy'] }
+      : { orderBy?: AccountGroupByArgs['orderBy'] },
     OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
     ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
     ByValid extends Prisma.Has<ByFields, OrderFields>,
@@ -996,21 +1596,24 @@ export interface accountDelegate<ExtArgs extends runtime.Types.Extensions.Intern
           ? never
           : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
       }[OrderFields]
-  >(args: Prisma.SubsetIntersection<T, accountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  >(args: Prisma.SubsetIntersection<T, AccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 /**
- * Fields of the account model
+ * Fields of the Account model
  */
-readonly fields: accountFieldRefs;
+readonly fields: AccountFieldRefs;
 }
 
 /**
- * The delegate class that acts as a "Promise-like" for account.
+ * The delegate class that acts as a "Promise-like" for Account.
  * Why is this prefixed with `Prisma__`?
  * Because we want to prevent naming conflicts as mentioned in
  * https://github.com/prisma/prisma-client-js/issues/707
  */
-export interface Prisma__accountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  oauthIdentities<T extends Prisma.Account$oauthIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$oauthIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OAuthIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordCredential<T extends Prisma.Account$passwordCredentialArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$passwordCredentialArgs<ExtArgs>>): Prisma.Prisma__PasswordCredentialClient<runtime.Types.Result.GetResult<Prisma.$PasswordCredentialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  groupMembers<T extends Prisma.Account$groupMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$groupMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1037,389 +1640,501 @@ export interface Prisma__accountClient<T, Null = never, ExtArgs extends runtime.
 
 
 /**
- * Fields of the account model
+ * Fields of the Account model
  */
-export interface accountFieldRefs {
-  readonly id: Prisma.FieldRef<"account", 'String'>
-  readonly username: Prisma.FieldRef<"account", 'String'>
-  readonly first_name: Prisma.FieldRef<"account", 'String'>
-  readonly last_name: Prisma.FieldRef<"account", 'String'>
-  readonly languageCode: Prisma.FieldRef<"account", 'String'>
-  readonly photo_url: Prisma.FieldRef<"account", 'String'>
-  readonly role: Prisma.FieldRef<"account", 'UserRole'>
-  readonly theme: Prisma.FieldRef<"account", 'UserTheme'>
-  readonly ban: Prisma.FieldRef<"account", 'Boolean'>
-  readonly is_active: Prisma.FieldRef<"account", 'Boolean'>
-  readonly termsAccepted: Prisma.FieldRef<"account", 'Boolean'>
-  readonly registeredFromBotId: Prisma.FieldRef<"account", 'String'>
-  readonly createdAt: Prisma.FieldRef<"account", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"account", 'DateTime'>
+export interface AccountFieldRefs {
+  readonly id: Prisma.FieldRef<"Account", 'String'>
+  readonly username: Prisma.FieldRef<"Account", 'String'>
+  readonly firstName: Prisma.FieldRef<"Account", 'String'>
+  readonly lastName: Prisma.FieldRef<"Account", 'String'>
+  readonly gender: Prisma.FieldRef<"Account", 'Gender'>
+  readonly birthDate: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly photoUrl: Prisma.FieldRef<"Account", 'String'>
+  readonly email: Prisma.FieldRef<"Account", 'String'>
+  readonly emailVerifiedAt: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly languageCode: Prisma.FieldRef<"Account", 'String'>
+  readonly theme: Prisma.FieldRef<"Account", 'UserTheme'>
+  readonly status: Prisma.FieldRef<"Account", 'AccountStatus'>
+  readonly isBanned: Prisma.FieldRef<"Account", 'Boolean'>
+  readonly isActive: Prisma.FieldRef<"Account", 'Boolean'>
+  readonly termsAccepted: Prisma.FieldRef<"Account", 'Boolean'>
+  readonly termsAcceptedAt: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly termsVersion: Prisma.FieldRef<"Account", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Account", 'DateTime'>
 }
     
 
 // Custom InputTypes
 /**
- * account findUnique
+ * Account findUnique
  */
-export type accountFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * Filter, which account to fetch.
+   * Choose, which related nodes to fetch as well
    */
-  where: Prisma.accountWhereUniqueInput
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
+   * Filter, which Account to fetch.
+   */
+  where: Prisma.AccountWhereUniqueInput
 }
 
 /**
- * account findUniqueOrThrow
+ * Account findUniqueOrThrow
  */
-export type accountFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * Filter, which account to fetch.
+   * Choose, which related nodes to fetch as well
    */
-  where: Prisma.accountWhereUniqueInput
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
+   * Filter, which Account to fetch.
+   */
+  where: Prisma.AccountWhereUniqueInput
 }
 
 /**
- * account findFirst
+ * Account findFirst
  */
-export type accountFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * Filter, which account to fetch.
+   * Choose, which related nodes to fetch as well
    */
-  where?: Prisma.accountWhereInput
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
+   * Filter, which Account to fetch.
+   */
+  where?: Prisma.AccountWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of accounts to fetch.
+   * Determine the order of Accounts to fetch.
    */
-  orderBy?: Prisma.accountOrderByWithRelationInput | Prisma.accountOrderByWithRelationInput[]
+  orderBy?: Prisma.AccountOrderByWithRelationInput | Prisma.AccountOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for accounts.
+   * Sets the position for searching for Accounts.
    */
-  cursor?: Prisma.accountWhereUniqueInput
+  cursor?: Prisma.AccountWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` accounts from the position of the cursor.
+   * Take `±n` Accounts from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` accounts.
+   * Skip the first `n` Accounts.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of accounts.
+   * Filter by unique combinations of Accounts.
    */
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
 }
 
 /**
- * account findFirstOrThrow
+ * Account findFirstOrThrow
  */
-export type accountFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * Filter, which account to fetch.
+   * Choose, which related nodes to fetch as well
    */
-  where?: Prisma.accountWhereInput
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
+   * Filter, which Account to fetch.
+   */
+  where?: Prisma.AccountWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of accounts to fetch.
+   * Determine the order of Accounts to fetch.
    */
-  orderBy?: Prisma.accountOrderByWithRelationInput | Prisma.accountOrderByWithRelationInput[]
+  orderBy?: Prisma.AccountOrderByWithRelationInput | Prisma.AccountOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for accounts.
+   * Sets the position for searching for Accounts.
    */
-  cursor?: Prisma.accountWhereUniqueInput
+  cursor?: Prisma.AccountWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` accounts from the position of the cursor.
+   * Take `±n` Accounts from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` accounts.
+   * Skip the first `n` Accounts.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of accounts.
+   * Filter by unique combinations of Accounts.
    */
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
 }
 
 /**
- * account findMany
+ * Account findMany
  */
-export type accountFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * Filter, which accounts to fetch.
+   * Choose, which related nodes to fetch as well
    */
-  where?: Prisma.accountWhereInput
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
+   * Filter, which Accounts to fetch.
+   */
+  where?: Prisma.AccountWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of accounts to fetch.
+   * Determine the order of Accounts to fetch.
    */
-  orderBy?: Prisma.accountOrderByWithRelationInput | Prisma.accountOrderByWithRelationInput[]
+  orderBy?: Prisma.AccountOrderByWithRelationInput | Prisma.AccountOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for listing accounts.
+   * Sets the position for listing Accounts.
    */
-  cursor?: Prisma.accountWhereUniqueInput
+  cursor?: Prisma.AccountWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` accounts from the position of the cursor.
+   * Take `±n` Accounts from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` accounts.
+   * Skip the first `n` Accounts.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of accounts.
+   * Filter by unique combinations of Accounts.
    */
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
 }
 
 /**
- * account create
+ * Account create
  */
-export type accountCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * The data needed to create a account.
+   * Choose, which related nodes to fetch as well
    */
-  data: Prisma.XOR<Prisma.accountCreateInput, Prisma.accountUncheckedCreateInput>
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
+   * The data needed to create a Account.
+   */
+  data: Prisma.XOR<Prisma.AccountCreateInput, Prisma.AccountUncheckedCreateInput>
 }
 
 /**
- * account createMany
+ * Account createMany
  */
-export type accountCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to create many accounts.
+   * The data used to create many Accounts.
    */
-  data: Prisma.accountCreateManyInput | Prisma.accountCreateManyInput[]
+  data: Prisma.AccountCreateManyInput | Prisma.AccountCreateManyInput[]
   skipDuplicates?: boolean
 }
 
 /**
- * account createManyAndReturn
+ * Account createManyAndReturn
  */
-export type accountCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelectCreateManyAndReturn<ExtArgs> | null
+  select?: Prisma.AccountSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * The data used to create many accounts.
+   * The data used to create many Accounts.
    */
-  data: Prisma.accountCreateManyInput | Prisma.accountCreateManyInput[]
+  data: Prisma.AccountCreateManyInput | Prisma.AccountCreateManyInput[]
   skipDuplicates?: boolean
 }
 
 /**
- * account update
+ * Account update
  */
-export type accountUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * The data needed to update a account.
+   * Choose, which related nodes to fetch as well
    */
-  data: Prisma.XOR<Prisma.accountUpdateInput, Prisma.accountUncheckedUpdateInput>
+  include?: Prisma.AccountInclude<ExtArgs> | null
   /**
-   * Choose, which account to update.
+   * The data needed to update a Account.
    */
-  where: Prisma.accountWhereUniqueInput
+  data: Prisma.XOR<Prisma.AccountUpdateInput, Prisma.AccountUncheckedUpdateInput>
+  /**
+   * Choose, which Account to update.
+   */
+  where: Prisma.AccountWhereUniqueInput
 }
 
 /**
- * account updateMany
+ * Account updateMany
  */
-export type accountUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to update accounts.
+   * The data used to update Accounts.
    */
-  data: Prisma.XOR<Prisma.accountUpdateManyMutationInput, Prisma.accountUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.AccountUpdateManyMutationInput, Prisma.AccountUncheckedUpdateManyInput>
   /**
-   * Filter which accounts to update
+   * Filter which Accounts to update
    */
-  where?: Prisma.accountWhereInput
+  where?: Prisma.AccountWhereInput
   /**
-   * Limit how many accounts to update.
+   * Limit how many Accounts to update.
    */
   limit?: number
 }
 
 /**
- * account updateManyAndReturn
+ * Account updateManyAndReturn
  */
-export type accountUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelectUpdateManyAndReturn<ExtArgs> | null
+  select?: Prisma.AccountSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * The data used to update accounts.
+   * The data used to update Accounts.
    */
-  data: Prisma.XOR<Prisma.accountUpdateManyMutationInput, Prisma.accountUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.AccountUpdateManyMutationInput, Prisma.AccountUncheckedUpdateManyInput>
   /**
-   * Filter which accounts to update
+   * Filter which Accounts to update
    */
-  where?: Prisma.accountWhereInput
+  where?: Prisma.AccountWhereInput
   /**
-   * Limit how many accounts to update.
+   * Limit how many Accounts to update.
    */
   limit?: number
 }
 
 /**
- * account upsert
+ * Account upsert
  */
-export type accountUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * The filter to search for the account to update in case it exists.
+   * Choose, which related nodes to fetch as well
    */
-  where: Prisma.accountWhereUniqueInput
+  include?: Prisma.AccountInclude<ExtArgs> | null
   /**
-   * In case the account found by the `where` argument doesn't exist, create a new account with this data.
+   * The filter to search for the Account to update in case it exists.
    */
-  create: Prisma.XOR<Prisma.accountCreateInput, Prisma.accountUncheckedCreateInput>
+  where: Prisma.AccountWhereUniqueInput
   /**
-   * In case the account was found with the provided `where` argument, update it with this data.
+   * In case the Account found by the `where` argument doesn't exist, create a new Account with this data.
    */
-  update: Prisma.XOR<Prisma.accountUpdateInput, Prisma.accountUncheckedUpdateInput>
+  create: Prisma.XOR<Prisma.AccountCreateInput, Prisma.AccountUncheckedCreateInput>
+  /**
+   * In case the Account was found with the provided `where` argument, update it with this data.
+   */
+  update: Prisma.XOR<Prisma.AccountUpdateInput, Prisma.AccountUncheckedUpdateInput>
 }
 
 /**
- * account delete
+ * Account delete
  */
-export type accountDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the Account
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.AccountSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the Account
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.AccountOmit<ExtArgs> | null
   /**
-   * Filter which account to delete.
+   * Choose, which related nodes to fetch as well
    */
-  where: Prisma.accountWhereUniqueInput
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  /**
+   * Filter which Account to delete.
+   */
+  where: Prisma.AccountWhereUniqueInput
 }
 
 /**
- * account deleteMany
+ * Account deleteMany
  */
-export type accountDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which accounts to delete
+   * Filter which Accounts to delete
    */
-  where?: Prisma.accountWhereInput
+  where?: Prisma.AccountWhereInput
   /**
-   * Limit how many accounts to delete.
+   * Limit how many Accounts to delete.
    */
   limit?: number
 }
 
 /**
- * account without action
+ * Account.oauthIdentities
  */
-export type accountDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Account$oauthIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the account
+   * Select specific fields to fetch from the OAuthIdentity
    */
-  select?: Prisma.accountSelect<ExtArgs> | null
+  select?: Prisma.OAuthIdentitySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the account
+   * Omit specific fields from the OAuthIdentity
    */
-  omit?: Prisma.accountOmit<ExtArgs> | null
+  omit?: Prisma.OAuthIdentityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OAuthIdentityInclude<ExtArgs> | null
+  where?: Prisma.OAuthIdentityWhereInput
+  orderBy?: Prisma.OAuthIdentityOrderByWithRelationInput | Prisma.OAuthIdentityOrderByWithRelationInput[]
+  cursor?: Prisma.OAuthIdentityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OAuthIdentityScalarFieldEnum | Prisma.OAuthIdentityScalarFieldEnum[]
+}
+
+/**
+ * Account.passwordCredential
+ */
+export type Account$passwordCredentialArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordCredential
+   */
+  select?: Prisma.PasswordCredentialSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordCredential
+   */
+  omit?: Prisma.PasswordCredentialOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordCredentialInclude<ExtArgs> | null
+  where?: Prisma.PasswordCredentialWhereInput
+}
+
+/**
+ * Account.groupMembers
+ */
+export type Account$groupMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GroupMember
+   */
+  select?: Prisma.GroupMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GroupMember
+   */
+  omit?: Prisma.GroupMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GroupMemberInclude<ExtArgs> | null
+  where?: Prisma.GroupMemberWhereInput
+  orderBy?: Prisma.GroupMemberOrderByWithRelationInput | Prisma.GroupMemberOrderByWithRelationInput[]
+  cursor?: Prisma.GroupMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GroupMemberScalarFieldEnum | Prisma.GroupMemberScalarFieldEnum[]
+}
+
+/**
+ * Account without action
+ */
+export type AccountDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Account
+   */
+  select?: Prisma.AccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Account
+   */
+  omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
 }

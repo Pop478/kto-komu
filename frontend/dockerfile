@@ -1,0 +1,31 @@
+# ---------- BASE ----------
+FROM node:22.19.0-alpine AS base
+
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+RUN npm install -g pnpm@12.8.2
+
+WORKDIR /app
+COPY . .
+
+# ---------- BUILD ----------
+FROM base AS build
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+RUN cat .env.production
+
+RUN pnpm run build
+
+# ---------- RUNTIME ----------
+FROM node:22.19.0-alpine
+
+WORKDIR /app
+
+RUN npm install -g serve
+
+COPY --from=build /app/build/client /app/dist
+
+EXPOSE 3000
+
+CMD ["serve", "-s", "dist", "-l", "3000"]

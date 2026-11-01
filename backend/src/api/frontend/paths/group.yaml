@@ -1,0 +1,219 @@
+ListGroups:
+    summary: List groups of the current account
+    operationId: listGroups
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    responses:
+        '200':
+            description: Groups where the current account is a member.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/group.yaml#/GroupListResponse'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+
+CreateGroup:
+    summary: Create a group
+    operationId: createGroup
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/group.yaml#/GroupCreateRequest'
+    responses:
+        '201':
+            description: Group created. The current account is added as OWNER.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/group.yaml#/GroupResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+
+GetGroup:
+    summary: Get a group with members
+    operationId: getGroup
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    parameters:
+        - $ref: '#/GroupIdParameter'
+    responses:
+        '200':
+            description: Group and its members.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/group.yaml#/GroupResponse'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+
+UpdateGroup:
+    summary: Rename a group
+    operationId: updateGroup
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    parameters:
+        - $ref: '#/GroupIdParameter'
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/group.yaml#/GroupUpdateRequest'
+    responses:
+        '200':
+            description: Group updated by its owner or admin.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/group.yaml#/GroupSummaryResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+
+DeleteGroup:
+    summary: Delete a group
+    operationId: deleteGroup
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    parameters:
+        - $ref: '#/GroupIdParameter'
+    responses:
+        '204':
+            description: Group deleted by its owner.
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+
+AddGroupMember:
+    summary: Add an account to a group
+    operationId: addGroupMember
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    parameters:
+        - $ref: '#/GroupIdParameter'
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/group.yaml#/GroupAddMemberRequest'
+    responses:
+        '201':
+            description: Account added as MEMBER by the group owner or admin.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/group.yaml#/GroupMemberResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+        '409':
+            $ref: '../responses/error.yaml#/Conflict'
+
+UpdateGroupMemberRole:
+    summary: Change a group member role
+    operationId: updateGroupMemberRole
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    parameters:
+        - $ref: '#/GroupIdParameter'
+        - $ref: '#/MemberIdParameter'
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/group.yaml#/GroupUpdateMemberRoleRequest'
+    responses:
+        '200':
+            description: Role updated by the group owner. OWNER cannot be assigned through this endpoint.
+            content:
+                application/json:
+                    schema:
+                        $ref: '../responses/group.yaml#/GroupMemberResponse'
+        '400':
+            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+        '409':
+            $ref: '../responses/error.yaml#/Conflict'
+
+RemoveGroupMember:
+    summary: Remove a member from a group
+    operationId: removeGroupMember
+    tags:
+        - Groups
+    security:
+        - cookieAuth: []
+    parameters:
+        - $ref: '#/GroupIdParameter'
+        - $ref: '#/MemberIdParameter'
+    responses:
+        '204':
+            description: Member removed. A member may leave voluntarily; admins can manage members; only the owner can remove an admin.
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/error.yaml#/Forbidden'
+        '404':
+            $ref: '../responses/error.yaml#/NotFound'
+        '409':
+            $ref: '../responses/error.yaml#/Conflict'
+
+GroupIdParameter:
+    in: path
+    name: groupId
+    required: true
+    schema:
+        type: string
+        format: uuid
+
+MemberIdParameter:
+    in: path
+    name: memberId
+    required: true
+    schema:
+        type: string
+        format: uuid

@@ -1,6 +1,6 @@
 openapi: '3.1.0'
 info:
-    title: Banana V2
+    title: kto-komu
     version: '1.0.0'
     license:
         name: MIT
@@ -24,43 +24,62 @@ security:
 
 paths:
     # AUTH
-    /v1/auth/telegram-mini-app:
-        post:
-            $ref: './paths/auth.yaml#/AuthTelegramMiniApp'
-
-    /v1/auth/telegram-login:
-        post:
-            $ref: './paths/auth.yaml#/AuthTelegramLogin'
-
-    /v1/auth/google/url:
+    /v1/auth/yandex/url:
         get:
-            $ref: './paths/auth.yaml#/GoogleAuthRedirect'
-    /v1/auth/google/callback:
-        post:
-            $ref: './paths/auth.yaml#/AuthGoogleCallback'
-
-    /v1/auth/email/register:
-        post:
-            $ref: './paths/auth.yaml#/AuthEmailRegister'
-    /v1/auth/email/login:
-        post:
-            $ref: './paths/auth.yaml#/AuthEmailLogin'
-    /v1/auth/email/verify-email:
+            $ref: './paths/auth.yaml#/YandexAuthRedirect'
+    /v1/auth/yandex/callback:
         get:
-            $ref: './paths/auth.yaml#/VerifyEmail'
-    /v1/auth/email/resend-email:
-        post:
-            $ref: './paths/auth.yaml#/ResendEmail'
-    /v1/auth/email/forgot-password:
-        post:
-            $ref: './paths/auth.yaml#/ForgotPassword'
-    /v1/auth/email/reset-password:
-        post:
-            $ref: './paths/auth.yaml#/ResetPassword'
+            $ref: './paths/auth.yaml#/AuthYandexCallback'
+    # /v1/auth/google/url:
+    #     get:
+    #         $ref: './paths/auth.yaml#/GoogleAuthRedirect'
+    # /v1/auth/google/callback:
+    #     post:
+    #         $ref: './paths/auth.yaml#/AuthGoogleCallback'
+    # /v1/auth/email/register:
+    #     post:
+    #         $ref: './paths/auth.yaml#/AuthEmailRegister'
+    # /v1/auth/email/login:
+    #     post:
+    #         $ref: './paths/auth.yaml#/AuthEmailLogin'
+    # /v1/auth/email/verify-email:
+    #     get:
+    #         $ref: './paths/auth.yaml#/VerifyEmail'
+    # /v1/auth/email/resend-email:
+    #     post:
+    #         $ref: './paths/auth.yaml#/ResendEmail'
+    # /v1/auth/email/forgot-password:
+    #     post:
+    #         $ref: './paths/auth.yaml#/ForgotPassword'
+    # /v1/auth/email/reset-password:
+    #     post:
+    #         $ref: './paths/auth.yaml#/ResetPassword'
     /v1/auth/me:
         get:
             $ref: './paths/auth.yaml#/MeUser'
-
     /v1/auth/logout:
         post:
             $ref: './paths/auth.yaml#/LogoutUser'
+
+    # GROUP
+    /v1/group:
+        get:
+            $ref: './paths/group.yaml#/ListGroups'
+        post:
+            $ref: './paths/group.yaml#/CreateGroup'
+    /v1/group/{groupId}:
+        get:
+            $ref: './paths/group.yaml#/GetGroup'
+        patch:
+            $ref: './paths/group.yaml#/UpdateGroup'
+        delete:
+            $ref: './paths/group.yaml#/DeleteGroup'
+    /v1/group/{groupId}/members:
+        post:
+            $ref: './paths/group.yaml#/AddGroupMember'
+    /v1/group/{groupId}/members/{memberId}/role:
+        patch:
+            $ref: './paths/group.yaml#/UpdateGroupMemberRole'
+    /v1/group/{groupId}/members/{memberId}:
+        delete:
+            $ref: './paths/group.yaml#/RemoveGroupMember'

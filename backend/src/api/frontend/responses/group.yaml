@@ -1,0 +1,165 @@
+GroupListResponse:
+    type: object
+    required:
+        - ok
+        - groups
+    properties:
+        ok:
+            type: boolean
+            const: true
+        groups:
+            type: array
+            items:
+                $ref: '#/GroupSummary'
+
+GroupResponse:
+    type: object
+    required:
+        - ok
+        - group
+    properties:
+        ok:
+            type: boolean
+            const: true
+        group:
+            $ref: '#/Group'
+
+GroupSummaryResponse:
+    type: object
+    required:
+        - ok
+        - group
+    properties:
+        ok:
+            type: boolean
+            const: true
+        group:
+            $ref: '#/GroupSummary'
+
+GroupMemberResponse:
+    type: object
+    required:
+        - ok
+        - member
+    properties:
+        ok:
+            type: boolean
+            const: true
+        member:
+            $ref: '#/GroupMember'
+
+GroupSummary:
+    type: object
+    required:
+        - id
+        - name
+        - createdAt
+        - membersCount
+    properties:
+        id:
+            type: string
+            format: uuid
+        name:
+            type: string
+        createdAt:
+            type: string
+            format: date-time
+        membersCount:
+            type: integer
+            minimum: 0
+
+Group:
+    type: object
+    required:
+        - id
+        - name
+        - createdAt
+        - members
+    properties:
+        id:
+            type: string
+            format: uuid
+        name:
+            type: string
+        createdAt:
+            type: string
+            format: date-time
+        members:
+            type: array
+            items:
+                allOf:
+                    - $ref: '#/GroupMember'
+                    - type: object
+                      required:
+                        - account
+                      properties:
+                          account:
+                              oneOf:
+                                  - $ref: '#/AccountPreview'
+                                  - type: 'null'
+
+GroupMember:
+    type: object
+    required:
+        - id
+        - accountId
+        - displayName
+        - role
+        - joinedAt
+        - createdAt
+    properties:
+        id:
+            type: string
+            format: uuid
+        accountId:
+            type:
+                - string
+                - 'null'
+            format: uuid
+        displayName:
+            type: string
+            maxLength: 100
+        role:
+            type: string
+            enum:
+                - OWNER
+                - ADMIN
+                - MEMBER
+        joinedAt:
+            type:
+                - string
+                - 'null'
+            format: date-time
+        createdAt:
+            type: string
+            format: date-time
+
+AccountPreview:
+    type: object
+    required:
+        - id
+        - username
+        - firstName
+        - lastName
+        - photoUrl
+    properties:
+        id:
+            type: string
+            format: uuid
+        username:
+            type:
+                - string
+                - 'null'
+        firstName:
+            type:
+                - string
+                - 'null'
+        lastName:
+            type:
+                - string
+                - 'null'
+        photoUrl:
+            type:
+                - string
+                - 'null'
+            format: uri

@@ -1,58 +1,58 @@
 import { Prisma } from '../generated/prisma/client.js'
-import { UserRole, UserTheme } from '../generated/prisma/enums.js'
+import {
+    AccountStatus,
+    Gender,
+    UserTheme,
+} from '../generated/prisma/enums.js'
 import { prisma } from '../lib/prisma.js'
-import { isNumeric, isUuid } from '../utils/validators.js'
 
 export interface CreateUserDTO {
-    telegramId: bigint
-    username: string | null
-    first_name: string | null
-    last_name: string | null
-    is_premium: boolean
-    languageCode: string | null
-    photo_url: string | null
-    refCode?: string
-    telegramBotId?: string
+    username?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    gender?: Gender | null
+    birthDate?: Date | null
+    photoUrl?: string | null
+    email?: string | null
+    emailVerifiedAt?: Date | null
+    languageCode?: string | null
+    theme?: UserTheme
+    status?: AccountStatus
+    isBanned?: boolean
+    isActive?: boolean
 }
 
 export interface UpdateUserDTO {
-    id: string
-    username: string | null
-    first_name: string | null
-    last_name: string | null
-    is_premium: boolean
-    languageCode: string | null
-    // photo_url?: string | null
+    username?: string | null
+    firstName?: string | null
+    lastName?: string | null
+    gender?: Gender | null
+    birthDate?: Date | null
+    photoUrl?: string | null
+    email?: string | null
+    emailVerifiedAt?: Date | null
+    languageCode?: string | null
+    theme?: UserTheme
+    status?: AccountStatus
+    isBanned?: boolean
+    isActive?: boolean
 }
 
 export interface UpdateUserSettingsDTO {
-    id: string
-    first_name?: string | null
+    firstName?: string | null
     languageCode?: string | null
     theme?: UserTheme
-    photo_url?: string | null
+    photoUrl?: string | null
 }
 
-export interface AdminUpdateUserDTO {
-    username?: string | null
-    first_name?: string | null
-    last_name?: string | null
-    languageCode?: string | null
-    photo_url?: string | null
-    is_premium?: boolean
-    role?: UserRole
-    theme?: UserTheme
-    isBanned?: boolean
-    ban?: boolean
-    is_active?: boolean
-}
+export interface AdminUpdateUserDTO extends UpdateUserDTO {}
 
 type GetUsersParams = {
     page?: number
     limit?: number
     search?: string
     isBanned?: boolean
-    role?: 'user' | 'admin'
+    status?: AccountStatus
 }
 
 type TxClient = Prisma.TransactionClient
@@ -62,135 +62,108 @@ export class UserRepository {
         return tx ?? prisma
     }
 
-    static async findByTelegramId(telegramId: bigint, tx?: TxClient) {
-        return this.db(tx).users.findUnique({
-            where: { telegramId },
+    static async findById(id: string, tx?: TxClient) {
+        return this.db(tx).account.findUnique({
+            where: { id },
         })
     }
 
-    static async findById(id: string, tx?: TxClient) {
-        return this.db(tx).users.findUnique({
+    static async findByIdWithOAuthIdentities(id: string, tx?: TxClient) {
+        return this.db(tx).account.findUnique({
             where: { id },
             include: {
-                settings: true,
+                oauthIdentities: {
+                    select: {
+                        provider: true,
+                        providerUserId: true,
+                    },
+                },
             },
         })
     }
 
-    static async findByIdWithProfile(id: string, tx?: TxClient) {
-        return this.db(tx).users.findUnique({
-            where: { id },
-            include: { profile: true },
+    static async findByEmail(email: string, tx?: TxClient) {
+        return this.db(tx).account.findFirst({
+            where: { email },
         })
     }
 
     static async create(data: CreateUserDTO, tx?: TxClient) {
-        return this.db(tx).users.create({
-            data: {
-                telegramId: data.telegramId,
-                username: data.username,
-                first_name: data.first_name,
-                last_name: data.last_name,
-                is_premium: data.is_premium,
-                languageCode: data.languageCode,
-                photo_url: data.photo_url,
-                role: UserRole.user,
-                registeredFromBotId: data.telegramBotId,
-                settings: {
-                    create: {},
-                },
-            },
-            include: {
-                settings: true,
-            },
+        return this.db(tx).account.create({
+            data,
         })
     }
 
-    static async updateTelegramData(data: UpdateUserDTO, tx?: TxClient) {
-        return this.db(tx).users.update({
-            where: { id: data.id },
-            data: {
-                username: data.username ?? undefined,
-                first_name: data.first_name ?? undefined,
-                last_name: data.last_name ?? undefined,
-                // languageCode: data.languageCode ?? undefined,
-                is_premium: data.is_premium ?? undefined,
-                // photo_url: data.photo_url?.trim() || undefined,
-
-                is_active: true,
-            },
-            include: {
-                settings: true,
-            },
+    static async updateUser(id: string, data: UpdateUserDTO, tx?: TxClient) {
+        return this.db(tx).account.update({
+            where: { id },
+            data,
         })
     }
 
-    static async updateSettings(data: UpdateUserSettingsDTO, tx?: TxClient) {
-        return this.db(tx).users.update({
-            where: {
-                id: data.id,
-            },
-            data: {
-                first_name:
-                    data.first_name !== undefined ? data.first_name : undefined,
-                languageCode:
-                    data.languageCode !== undefined
-                        ? data.languageCode
-                        : undefined,
-
-                theme: data.theme !== undefined ? data.theme : undefined,
-                photo_url:
-                    data.photo_url !== undefined ? data.photo_url : undefined,
-            },
+    static async updateSettings(
+        id: string,
+        data: UpdateUserSettingsDTO,
+        tx?: TxClient,
+    ) {
+        return this.db(tx).account.update({
+            where: { id },
+            data,
             select: {
                 id: true,
-                first_name: true,
+                firstName: true,
                 languageCode: true,
                 theme: true,
-                photo_url: true,
+                photoUrl: true,
                 updatedAt: true,
             },
         })
     }
 
-    static async acceptTerms(userId: string, tx?: TxClient) {
-        return this.db(tx).users.update({
-            where: {
-                id: userId,
-            },
+    static async acceptTerms(
+        userId: string,
+        termsVersion?: string,
+        tx?: TxClient,
+    ) {
+        return this.db(tx).account.update({
+            where: { id: userId },
             data: {
                 termsAccepted: true,
+                termsAcceptedAt: new Date(),
+                ...(termsVersion !== undefined ? { termsVersion } : {}),
             },
             select: {
                 id: true,
                 termsAccepted: true,
+                termsAcceptedAt: true,
+                termsVersion: true,
                 updatedAt: true,
             },
         })
     }
-    // Получение пользователей
-    static async getUsers(params: GetUsersParams = {}, tx?: TxClient) {
-        const page = params.page ?? 1
-        const limit = Math.min(params.limit ?? 20, 100)
-        const skip = (page - 1) * limit
 
+    static async getUsers(params: GetUsersParams = {}, tx?: TxClient) {
+        const page = Math.max(params.page ?? 1, 1)
+        const limit = Math.min(Math.max(params.limit ?? 20, 1), 100)
+        const skip = (page - 1) * limit
         const search = params.search?.trim()
 
-        const where: Prisma.UsersWhereInput = {
-            ...(params.isBanned !== undefined ? { ban: params.isBanned } : {}),
-            ...(params.role ? { role: params.role } : {}),
-
+        const where: Prisma.AccountWhereInput = {
+            ...(params.isBanned !== undefined
+                ? { isBanned: params.isBanned }
+                : {}),
+            ...(params.status !== undefined ? { status: params.status } : {}),
             ...(search
                 ? {
                       OR: [
                           {
-                              first_name: {
+                              firstName: {
                                   contains: search,
                                   mode: 'insensitive',
                               },
                           },
                           {
-                              last_name: {
+                              lastName: {
                                   contains: search,
                                   mode: 'insensitive',
                               },
@@ -201,36 +174,26 @@ export class UserRepository {
                                   mode: 'insensitive',
                               },
                           },
-                          ...(isUuid(search)
-                              ? [
-                                    {
-                                        id: search,
-                                    },
-                                ]
-                              : []),
-                          ...(isNumeric(search)
-                              ? [
-                                    {
-                                        telegramId: BigInt(search),
-                                    },
-                                ]
-                              : []),
+                          {
+                              email: {
+                                  contains: search,
+                                  mode: 'insensitive',
+                              },
+                          },
+                          ...(isUuid(search) ? [{ id: search }] : []),
                       ],
                   }
                 : {}),
         }
 
         const [users, total] = await Promise.all([
-            this.db(tx).users.findMany({
+            this.db(tx).account.findMany({
                 where,
-                orderBy: {
-                    createdAt: 'desc',
-                },
+                orderBy: { createdAt: 'desc' },
                 take: limit,
                 skip,
             }),
-
-            this.db(tx).users.count({ where }),
+            this.db(tx).account.count({ where }),
         ])
 
         return {
@@ -244,88 +207,24 @@ export class UserRepository {
         }
     }
 
-    static async updateUser(
-        id: string,
-        data: AdminUpdateUserDTO,
-        tx?: TxClient,
-    ) {
-        const existing = await this.findById(id, tx)
-
-        if (!existing) {
-            throw new Error('User not found')
-        }
-
-        return this.db(tx).users.update({
-            where: {
-                id,
-            },
-            data: {
-                ...(data.username !== undefined
-                    ? { username: data.username }
-                    : {}),
-                ...(data.first_name !== undefined
-                    ? { first_name: data.first_name }
-                    : {}),
-                ...(data.last_name !== undefined
-                    ? { last_name: data.last_name }
-                    : {}),
-                ...(data.languageCode !== undefined
-                    ? { languageCode: data.languageCode }
-                    : {}),
-                ...(data.photo_url !== undefined
-                    ? { photo_url: data.photo_url }
-                    : {}),
-                ...(data.is_premium !== undefined
-                    ? { is_premium: data.is_premium }
-                    : {}),
-                ...(data.role !== undefined ? { role: data.role } : {}),
-                ...(data.theme !== undefined ? { theme: data.theme } : {}),
-                ...(data.isBanned !== undefined ? { ban: data.isBanned } : {}),
-                ...(data.ban !== undefined ? { ban: data.ban } : {}),
-                ...(data.is_active !== undefined
-                    ? { is_active: data.is_active }
-                    : {}),
-            },
-        })
-    }
-
     static async deleteUser(id: string, tx?: TxClient) {
-        const existing = await this.findById(id, tx)
-
-        if (!existing) {
-            throw new Error('User not found')
-        }
-
-        return this.db(tx).users.delete({
-            where: {
-                id,
-            },
-        })
-    }
-
-    static async findAllBotUsers(tx?: TxClient) {
-        return this.db(tx).users.findMany({
-            where: {
-                telegramId: {
-                    not: null,
-                },
-            },
-            select: {
-                id: true,
-                telegramId: true,
-            },
-            orderBy: {
-                createdAt: 'desc',
-            },
+        return this.db(tx).account.delete({
+            where: { id },
         })
     }
 
     static async lockById(userId: string, tx: TxClient): Promise<void> {
         await tx.$queryRaw`
-        SELECT id
-        FROM "Users"
-        WHERE id = ${userId}
-        FOR UPDATE
-    `
+            SELECT account_id
+            FROM "account"
+            WHERE account_id = ${userId}::uuid
+            FOR UPDATE
+        `
     }
+}
+
+function isUuid(value: string): boolean {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        value,
+    )
 }

@@ -1,0 +1,744 @@
+openapi: 3.1.0
+info:
+  title: kto-komu
+  version: 1.0.0
+  license:
+    name: MIT
+    identifier: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:5000/api
+    description: Current server
+security:
+  - cookieAuth: []
+paths:
+  /v1/auth/yandex/url:
+    get:
+      summary: Start Yandex OAuth authorization
+      operationId: yandexAuthRedirect
+      tags:
+        - Auth
+      security: []
+      responses:
+        '302':
+          description: Redirect to the Yandex authorization page. The response sets short-lived PKCE and state cookies.
+          headers:
+            Location:
+              description: Yandex authorization URL.
+              schema:
+                type: string
+                format: uri
+            Set-Cookie:
+              description: HttpOnly YANDEX_OAUTH_STATE and YANDEX_OAUTH_CODE_VERIFIER cookies.
+              schema:
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/yandex/callback:
+    get:
+      summary: Complete Yandex OAuth authorization
+      operationId: authYandexCallback
+      tags:
+        - Auth
+      security: []
+      parameters:
+        - in: query
+          name: code
+          required: true
+          description: Single-use authorization code returned by Yandex.
+          schema:
+            type: string
+        - in: query
+          name: state
+          required: true
+          description: CSRF protection value returned by Yandex.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful authorization. The response sets the ACCESS_TOKEN HttpOnly cookie.
+          headers:
+            Set-Cookie:
+              description: ACCESS_TOKEN cookie.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/AuthBannedResponse'
+  /v1/auth/me:
+    get:
+      summary: Get the current authenticated account
+      operationId: meUser
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Current account and its registered OAuth providers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/auth/logout:
+    post:
+      summary: Log out the current account
+      operationId: logoutUser
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successful logout. The ACCESS_TOKEN cookie is cleared.
+          headers:
+            Set-Cookie:
+              description: Cleared ACCESS_TOKEN cookie.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutSuccessResponse'
+  /v1/group:
+    get:
+      summary: List groups of the current account
+      operationId: listGroups
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Groups where the current account is a member.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Create a group
+      operationId: createGroup
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreateRequest'
+      responses:
+        '201':
+          description: Group created. The current account is added as OWNER.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v1/group/{groupId}:
+    get:
+      summary: Get a group with members
+      operationId: getGroup
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+      responses:
+        '200':
+          description: Group and its members.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Rename a group
+      operationId: updateGroup
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupUpdateRequest'
+      responses:
+        '200':
+          description: Group updated by its owner or admin.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    delete:
+      summary: Delete a group
+      operationId: deleteGroup
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+      responses:
+        '204':
+          description: Group deleted by its owner.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v1/group/{groupId}/members:
+    post:
+      summary: Add an account to a group
+      operationId: addGroupMember
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupAddMemberRequest'
+      responses:
+        '201':
+          description: Account added as MEMBER by the group owner or admin.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupMemberResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/group/{groupId}/members/{memberId}/role:
+    patch:
+      summary: Change a group member role
+      operationId: updateGroupMemberRole
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+        - $ref: '#/components/parameters/MemberIdParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupUpdateMemberRoleRequest'
+      responses:
+        '200':
+          description: Role updated by the group owner. OWNER cannot be assigned through this endpoint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupMemberResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v1/group/{groupId}/members/{memberId}:
+    delete:
+      summary: Remove a member from a group
+      operationId: removeGroupMember
+      tags:
+        - Groups
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+        - $ref: '#/components/parameters/MemberIdParameter'
+      responses:
+        '204':
+          description: Member removed. A member may leave voluntarily; admins can manage members; only the owner can remove an admin.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: ACCESS_TOKEN
+  responses:
+    InternalServerError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+            required:
+              - error
+    BadRequest:
+      description: Неверный запрос
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+    Unauthorized:
+      description: Неавторизован
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              message:
+                type: string
+    AuthBannedResponse:
+      type: object
+      required:
+        - ok
+        - banned
+        - error
+      properties:
+        ok:
+          type: boolean
+          const: false
+        banned:
+          type: boolean
+          const: true
+        error:
+          type: string
+          const: USER_BANNED
+    Forbidden:
+      description: Доступ запрещён
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+            required:
+              - error
+    NotFound:
+      description: Сущность не найдена
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+            required:
+              - error
+    Conflict:
+      description: Конфликт данных
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+            required:
+              - error
+  schemas:
+    OAuthProvider:
+      type: object
+      required:
+        - provider
+        - providerUserId
+      properties:
+        provider:
+          type: string
+          example: yandex
+        providerUserId:
+          type: string
+          example: '1234567890'
+    AuthUser:
+      type: object
+      required:
+        - id
+        - theme
+        - status
+        - termsAccepted
+        - createdAt
+        - providers
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 019e3858-fdaa-7728-b8f5-990013a67f1d
+        username:
+          type:
+            - string
+            - 'null'
+          maxLength: 32
+          example: stepazavrik
+        firstName:
+          type:
+            - string
+            - 'null'
+          maxLength: 100
+        lastName:
+          type:
+            - string
+            - 'null'
+          maxLength: 100
+        gender:
+          type:
+            - string
+            - 'null'
+          enum:
+            - MALE
+            - FEMALE
+            - OTHER
+            - null
+        birthDate:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        photoUrl:
+          type:
+            - string
+            - 'null'
+          format: uri
+        email:
+          type:
+            - string
+            - 'null'
+          format: email
+        emailVerifiedAt:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        languageCode:
+          type:
+            - string
+            - 'null'
+          maxLength: 35
+          example: ru
+        theme:
+          type: string
+          enum:
+            - LIGHT
+            - DARK
+            - SYSTEM
+        status:
+          type: string
+          enum:
+            - GUEST
+            - REGISTERED
+        termsAccepted:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        providers:
+          type: array
+          description: OAuth identities linked to this account.
+          items:
+            $ref: '#/components/schemas/OAuthProvider'
+    AuthSuccessResponse:
+      type: object
+      required:
+        - ok
+        - user
+      properties:
+        ok:
+          type: boolean
+          const: true
+        user:
+          $ref: '#/components/schemas/AuthUser'
+        isNewUser:
+          type: boolean
+          description: Present after an OAuth callback; true when a new account was created.
+    LogoutSuccessResponse:
+      type: object
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+          const: true
+    GroupSummary:
+      type: object
+      required:
+        - id
+        - name
+        - createdAt
+        - membersCount
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        membersCount:
+          type: integer
+          minimum: 0
+    GroupListResponse:
+      type: object
+      required:
+        - ok
+        - groups
+      properties:
+        ok:
+          type: boolean
+          const: true
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupSummary'
+    GroupCreateRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: Weekend trip
+    GroupMember:
+      type: object
+      required:
+        - id
+        - accountId
+        - displayName
+        - role
+        - joinedAt
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        accountId:
+          type:
+            - string
+            - 'null'
+          format: uuid
+        displayName:
+          type: string
+          maxLength: 100
+        role:
+          type: string
+          enum:
+            - OWNER
+            - ADMIN
+            - MEMBER
+        joinedAt:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    AccountPreview:
+      type: object
+      required:
+        - id
+        - username
+        - firstName
+        - lastName
+        - photoUrl
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type:
+            - string
+            - 'null'
+        firstName:
+          type:
+            - string
+            - 'null'
+        lastName:
+          type:
+            - string
+            - 'null'
+        photoUrl:
+          type:
+            - string
+            - 'null'
+          format: uri
+    Group:
+      type: object
+      required:
+        - id
+        - name
+        - createdAt
+        - members
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        members:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/GroupMember'
+              - type: object
+                required:
+                  - account
+                properties:
+                  account:
+                    oneOf:
+                      - $ref: '#/components/schemas/AccountPreview'
+                      - type: 'null'
+    GroupResponse:
+      type: object
+      required:
+        - ok
+        - group
+      properties:
+        ok:
+          type: boolean
+          const: true
+        group:
+          $ref: '#/components/schemas/Group'
+    GroupUpdateRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: New group name
+    GroupSummaryResponse:
+      type: object
+      required:
+        - ok
+        - group
+      properties:
+        ok:
+          type: boolean
+          const: true
+        group:
+          $ref: '#/components/schemas/GroupSummary'
+    GroupAddMemberRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - accountId
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Optional name displayed in this group. The account profile name is used when omitted.
+    GroupMemberResponse:
+      type: object
+      required:
+        - ok
+        - member
+      properties:
+        ok:
+          type: boolean
+          const: true
+        member:
+          $ref: '#/components/schemas/GroupMember'
+    GroupUpdateMemberRoleRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          enum:
+            - ADMIN
+            - MEMBER
+  parameters:
+    GroupIdParameter:
+      in: path
+      name: groupId
+      required: true
+      schema:
+        type: string
+        format: uuid
+    MemberIdParameter:
+      in: path
+      name: memberId
+      required: true
+      schema:
+        type: string
+        format: uuid

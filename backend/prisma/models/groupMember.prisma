@@ -1,0 +1,24 @@
+model GroupMember {
+  id          String       @id @default(uuid(7)) @map("member_id") @db.Uuid
+  groupId     String       @map("group_id") @db.Uuid
+  accountId   String?      @map("account_id") @db.Uuid
+  displayName String       @map("display_name") @db.VarChar(100)
+  role        GroupRole    @default(MEMBER)
+  joinedAt    DateTime?    @map("joined_at") @db.Timestamptz(3)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  group       Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  account     Account?     @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+  @@unique([groupId, accountId])
+  @@index([accountId])
+  @@map("group_member")
+}
+
+enum GroupRole {
+  OWNER  @map("owner")
+  ADMIN  @map("admin")
+  MEMBER @map("member")
+
+  @@map("group_role")
+}

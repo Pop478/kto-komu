@@ -1,295 +1,73 @@
-AuthTelegramMiniApp:
-    summary: Авторизация через Telegram Mini App initData
-    operationId: authTelegramMiniApp
+YandexAuthRedirect:
+    summary: Start Yandex OAuth authorization
+    operationId: yandexAuthRedirect
     tags:
         - Auth
-
-    parameters:
-        - in: header
-          name: Authorization
-          required: true
-          description: 'Формат: `tma <initData>`'
-          schema:
-              type: string
-              example: 'tma query_id=AAFe...'
-        - in: query
-          name: ref
-          required: false
-          description: Реферальный код пользователя
-          schema:
-              type: string
-              format: uuid
-        - in: query
-          name: telegramBotId
-          required: false
-          description: Telegram bot id
-          schema:
-              type: string
-              example: '8196739079'
-        - in: query
-          name: adLink
-          required: false
-          description: Рекламная ссылка/метка
-          schema:
-              type: string
-
-    responses:
-        '200':
-            description: Успешная авторизация
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
-        '400':
-            $ref: '../responses/error.yaml#/BadRequest'
-        '401':
-            $ref: '../responses/error.yaml#/Unauthorized'
-        '403':
-            description: Пользователь заблокирован
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/AuthBannedResponse'
-
-AuthTelegramLogin:
-    summary: Авторизация через Telegram Login OIDC
-    operationId: authTelegramLogin
-    tags:
-        - Auth
-
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    $ref: '../schemas/auth.yaml#/TelegramLoginRequest'
-
-    responses:
-        '200':
-            description: Успешная авторизация
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
-        '400':
-            $ref: '../responses/error.yaml#/BadRequest'
-        '401':
-            $ref: '../responses/error.yaml#/Unauthorized'
-        '403':
-            description: Пользователь заблокирован
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/AuthBannedResponse'
-
-GoogleAuthRedirect:
-    summary: Редирект на Google OAuth/OIDC
-    operationId: googleAuthRedirect
-    tags:
-        - Auth
-
+    security: []
     responses:
         '302':
-            description: Редирект на страницу авторизации Google
+            description: Redirect to the Yandex authorization page. The response sets short-lived PKCE and state cookies.
             headers:
                 Location:
-                    description: URL авторизации Google
+                    description: Yandex authorization URL.
                     schema:
                         type: string
                         format: uri
+                Set-Cookie:
+                    description: HttpOnly YANDEX_OAUTH_STATE and YANDEX_OAUTH_CODE_VERIFIER cookies.
+                    schema:
+                        type: string
         '500':
             $ref: '../responses/error.yaml#/InternalServerError'
 
-AuthGoogleCallback:
-    summary: Авторизация через Google OAuth/OIDC callback
-    operationId: authGoogleCallback
+AuthYandexCallback:
+    summary: Complete Yandex OAuth authorization
+    operationId: authYandexCallback
     tags:
         - Auth
-
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    $ref: '../schemas/auth.yaml#/GoogleCallbackRequest'
-
-    responses:
-        '200':
-            description: Успешная авторизация
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
-        '400':
-            $ref: '../responses/error.yaml#/BadRequest'
-        '401':
-            $ref: '../responses/error.yaml#/Unauthorized'
-        '403':
-            description: Пользователь заблокирован
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/AuthBannedResponse'
-
-AuthEmailRegister:
-    summary: Регистрация по email и паролю
-    operationId: authEmailRegister
-    tags:
-        - Auth
-
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    $ref: '../schemas/auth.yaml#/EmailRegisterRequest'
-
-    responses:
-        '201':
-            description: Пользователь зарегистрирован
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/MessageResponse'
-        '400':
-            $ref: '../responses/error.yaml#/BadRequest'
-        '409':
-            description: Email уже зарегистрирован
-        '500':
-            $ref: '../responses/error.yaml#/InternalServerError'
-
-ResendEmail:
-    summary: Повторная отправка письма подтверждения email
-    operationId: authResendEmailVerification
-    tags:
-        - Auth
-
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    $ref: '../schemas/auth.yaml#/ResendEmailVerificationRequest'
-
-    responses:
-        '200':
-            description: Если email существует и не подтверждён, письмо будет отправлено
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/MessageResponse'
-        '400':
-            $ref: '../responses/error.yaml#/BadRequest'
-        '429':
-            description: Слишком много попыток отправки письма
-        '500':
-            $ref: '../responses/error.yaml#/InternalServerError'
-
-AuthEmailLogin:
-    summary: Авторизация по email и паролю
-    operationId: authEmailLogin
-    tags:
-        - Auth
-
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    $ref: '../schemas/auth.yaml#/EmailLoginRequest'
-
-    responses:
-        '200':
-            description: Успешная авторизация
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
-        '400':
-            $ref: '../responses/error.yaml#/BadRequest'
-        '401':
-            $ref: '../responses/error.yaml#/Unauthorized'
-        '403':
-            description: Пользователь заблокирован или email не подтверждён
-            content:
-                application/json:
-                    schema:
-                        oneOf:
-                            - $ref: '../responses/auth.yaml#/AuthBannedResponse'
-                            - $ref: '../responses/auth.yaml#/EmailNotVerifiedResponse'
-
-VerifyEmail:
-    summary: Подтверждение email
-    operationId: verifyEmail
-    tags:
-        - Auth
-
+    security: []
     parameters:
         - in: query
-          name: token
+          name: code
           required: true
+          description: Single-use authorization code returned by Yandex.
           schema:
               type: string
-
-    responses:
-        '302':
-            description: Редирект на страницу результата подтверждения
-
-ForgotPassword:
-    summary: Отправить письмо для сброса пароля
-    operationId: forgotPassword
-    tags:
-        - Auth
-
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    $ref: '../schemas/auth.yaml#/ForgotPasswordRequest'
-
+        - in: query
+          name: state
+          required: true
+          description: CSRF protection value returned by Yandex.
+          schema:
+              type: string
     responses:
         '200':
-            description: Письмо отправлено (или email отсутствует)
+            description: Successful authorization. The response sets the ACCESS_TOKEN HttpOnly cookie.
+            headers:
+                Set-Cookie:
+                    description: ACCESS_TOKEN cookie.
+                    schema:
+                        type: string
             content:
                 application/json:
                     schema:
-                        $ref: '../responses/auth.yaml#/MessageResponse'
+                        $ref: '../responses/auth.yaml#/AuthSuccessResponse'
         '400':
             $ref: '../responses/error.yaml#/BadRequest'
-
-ResetPassword:
-    summary: Сбросить пароль
-    operationId: resetPassword
-    tags:
-        - Auth
-
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    $ref: '../schemas/auth.yaml#/ResetPasswordRequest'
-
-    responses:
-        '200':
-            description: Пароль успешно изменён
-            content:
-                application/json:
-                    schema:
-                        $ref: '../responses/auth.yaml#/MessageResponse'
-        '400':
-            $ref: '../responses/error.yaml#/BadRequest'
+        '401':
+            $ref: '../responses/error.yaml#/Unauthorized'
+        '403':
+            $ref: '../responses/auth.yaml#/AuthBannedResponse'
 
 MeUser:
-    summary: Получить текущего пользователя
+    summary: Get the current authenticated account
     operationId: meUser
     tags:
         - Auth
-
+    security:
+        - cookieAuth: []
     responses:
         '200':
-            description: Текущий пользователь
+            description: Current account and its registered OAuth providers.
             content:
                 application/json:
                     schema:
@@ -298,14 +76,20 @@ MeUser:
             $ref: '../responses/error.yaml#/Unauthorized'
 
 LogoutUser:
-    summary: Выйти из аккаунта
+    summary: Log out the current account
     operationId: logoutUser
     tags:
         - Auth
-
+    security:
+        - cookieAuth: []
     responses:
         '200':
-            description: Успешный выход
+            description: Successful logout. The ACCESS_TOKEN cookie is cleared.
+            headers:
+                Set-Cookie:
+                    description: Cleared ACCESS_TOKEN cookie.
+                    schema:
+                        type: string
             content:
                 application/json:
                     schema:

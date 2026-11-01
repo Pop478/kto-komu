@@ -14,6 +14,12 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/main": {
+    params: {};
+  };
+  "/about": {
+    params: {};
+  };
   "/groups": {
     params: {};
   };
@@ -25,10 +31,13 @@ type Pages = {
       "groupId": string;
     };
   };
-  "/expenses/new": {
+  "/qr-scan": {
     params: {};
   };
   "/settlements": {
+    params: {};
+  };
+  "/profile": {
     params: {};
   };
   "/*": {
@@ -36,19 +45,37 @@ type Pages = {
       "*": string;
     };
   };
+  "/login": {
+    params: {};
+  };
+  "/login/yandex": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/groups" | "/groups/new" | "/groups/:groupId" | "/expenses/new" | "/settlements" | "/*";
+    page: "/" | "/main" | "/about" | "/groups" | "/groups/new" | "/groups/:groupId" | "/qr-scan" | "/settlements" | "/profile" | "/*" | "/login" | "/login/yandex";
+  };
+  "./components/layout/MainLayout.tsx": {
+    id: "components/layout/MainLayout";
+    page: "/main" | "/about";
+  };
+  "./pages/main/Main.tsx": {
+    id: "pages/main/Main";
+    page: "/main";
+  };
+  "./pages/main/About.tsx": {
+    id: "pages/main/About";
+    page: "/about";
   };
   "./components/layout/Layout.tsx": {
     id: "components/layout/Layout";
-    page: "/" | "/groups" | "/groups/new" | "/groups/:groupId" | "/expenses/new" | "/settlements" | "/*";
+    page: "/" | "/groups" | "/groups/new" | "/groups/:groupId" | "/qr-scan" | "/settlements" | "/profile" | "/*";
   };
-  "./pages/dashboard/Dashboard.tsx": {
-    id: "pages/dashboard/Dashboard";
+  "./pages/home/Home.tsx": {
+    id: "pages/home/Home";
     page: "/";
   };
   "./pages/groups/Groups.tsx": {
@@ -63,28 +90,51 @@ type RouteFiles = {
     id: "pages/groups/GroupDetails";
     page: "/groups/:groupId";
   };
-  "./pages/expenses/NewExpense.tsx": {
-    id: "pages/expenses/NewExpense";
-    page: "/expenses/new";
+  "./pages/QRScan/QRscan.tsx": {
+    id: "pages/QRScan/QRscan";
+    page: "/qr-scan";
   };
   "./pages/settlements/Settlements.tsx": {
     id: "pages/settlements/Settlements";
     page: "/settlements";
   };
+  "./pages/profile/Profile.tsx": {
+    id: "pages/profile/Profile";
+    page: "/profile";
+  };
   "./pages/not-found/NotFound.tsx": {
     id: "pages/not-found/NotFound";
     page: "/*";
+  };
+  "./components/layout/LoginLayout.tsx": {
+    id: "components/layout/LoginLayout";
+    page: "/login" | "/login/yandex";
+  };
+  "./pages/login/Login.tsx": {
+    id: "pages/login/Login";
+    page: "/login";
+  };
+  "./pages/login/Yandex.tsx": {
+    id: "pages/login/Yandex";
+    page: "/login/yandex";
   };
 };
 
 type RouteModules = {
   "root": typeof import("./src/root.tsx");
+  "components/layout/MainLayout": typeof import("./src/./components/layout/MainLayout.tsx");
+  "pages/main/Main": typeof import("./src/./pages/main/Main.tsx");
+  "pages/main/About": typeof import("./src/./pages/main/About.tsx");
   "components/layout/Layout": typeof import("./src/./components/layout/Layout.tsx");
-  "pages/dashboard/Dashboard": typeof import("./src/./pages/dashboard/Dashboard.tsx");
+  "pages/home/Home": typeof import("./src/./pages/home/Home.tsx");
   "pages/groups/Groups": typeof import("./src/./pages/groups/Groups.tsx");
   "pages/groups/NewGroup": typeof import("./src/./pages/groups/NewGroup.tsx");
   "pages/groups/GroupDetails": typeof import("./src/./pages/groups/GroupDetails.tsx");
-  "pages/expenses/NewExpense": typeof import("./src/./pages/expenses/NewExpense.tsx");
+  "pages/QRScan/QRscan": typeof import("./src/./pages/QRScan/QRscan.tsx");
   "pages/settlements/Settlements": typeof import("./src/./pages/settlements/Settlements.tsx");
+  "pages/profile/Profile": typeof import("./src/./pages/profile/Profile.tsx");
   "pages/not-found/NotFound": typeof import("./src/./pages/not-found/NotFound.tsx");
+  "components/layout/LoginLayout": typeof import("./src/./components/layout/LoginLayout.tsx");
+  "pages/login/Login": typeof import("./src/./pages/login/Login.tsx");
+  "pages/login/Yandex": typeof import("./src/./pages/login/Yandex.tsx");
 };

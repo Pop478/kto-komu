@@ -1,19 +1,8 @@
 import {
-    AuthProvider,
-    UserBalanceTransactionType,
-} from '../../generated/prisma/client.js'
-import { ReferralRepository } from '../../repositories/referral.repository.js'
-import { TransactionRepository } from '../../repositories/transaction.repository.js'
-import {
     CreateUserDTO,
     UpdateUserDTO,
     UserRepository,
 } from '../../repositories/user.repository.js'
-import { UserBalanceRepository } from '../../repositories/balance/userBalance.repository.js'
-import { BalanceService } from '../balance/balance.service.js'
-import { userDailyRewardRepository } from '../../repositories/dailyReward/userDailyReward.repository.js'
-import { UserProfileRepository } from '../../repositories/userProfile.repository.js'
-import { UserAuthProviderRepository } from '../../repositories/userAuthProvider.repository.js'
 
 const REFERRAL_REWARD_AMOUNT = 50
 

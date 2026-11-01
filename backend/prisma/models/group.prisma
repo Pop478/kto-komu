@@ -1,0 +1,11 @@
+model Group {
+  id        String   @id @default(uuid(7)) @map("group_id") @db.Uuid
+  name      String   @db.VarChar(150)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  members   GroupMember[]
+
+  @@map("group")
+}
+
+

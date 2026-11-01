@@ -1,16 +1,18 @@
 import { Router } from 'express'
 import { prisma } from '../lib/prisma.js'
-// import { jwtAuth } from '../middleware/authMiddleware.js'
-
-// import { authRouter } from './auth.js'
-// import { userRouter } from './user.js'
+import { jwtAuth } from '../middleware/authMiddleware.js'
+import { authRouter } from './auth.js'
+import { userRouter } from './user.js'
+import { groupRouter } from './group.js'
 // import { adminRoutes } from './admin/index.js'
 // import { jwtAuthAdmin } from '../middleware/authAdminMiddleWare.js'
 // import { redisRouter } from './redis.js'
 
 export const routes = Router()
 
-// routes.use('/auth', authRouter)
+routes.use('/auth', authRouter)
+// routes.use('/users', jwtAuth, userRouter)
+routes.use('/group', jwtAuth, groupRouter)
 // routes.use('/users', jwtAuth, userRouter)
 
 // ADMIN

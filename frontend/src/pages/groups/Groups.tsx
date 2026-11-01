@@ -1,55 +1,29 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router'
-import { formatMoney, useFinanceStore } from '../../stores/financeStore'
+import Button from '../../components/buttons/Button'
+import Loader from '../../components/loader/Loader'
+import { useGroupStore } from '../../stores/group.store'
+import styles from './groups.module.css'
 
 const Groups = () => {
-    const { groups, expenses } = useFinanceStore()
+    const { groups, loading, error, fetchGroups } = useGroupStore()
+
+    useEffect(() => { void fetchGroups() }, [fetchGroups])
+
     return (
-        <>
-            <div className="page-heading">
-                <div>
-                    <h1>Мои группы</h1>
-                    <p>Создавайте компании для поездок, дома и общих дел.</p>
-                </div>
-                <Link className="button button--primary" to="/groups/new">
-                    + Новая группа
-                </Link>
+        <main className={styles.page}>
+            <header className={styles.header}>
+                <div><p className={styles.eyebrow}>Ваши пространства</p><h1>Группы</h1><p>Объединяйте людей, с которыми делите расходы.</p></div>
+                <Link to="/groups/new" className={styles.buttonLink}>Создать группу</Link>
+            </header>
+            {loading && <Loader text="Загружаем группы" />}
+            {error && <p className={styles.error}>{error}</p>}
+            {!loading && !error && groups.length === 0 && <section className={styles.empty}><h2>Групп пока нет</h2><p>Создайте первую группу для дома, поездки или встречи с друзьями.</p><Link to="/groups/new"><Button>Создать группу</Button></Link></section>}
+            <div className={styles.grid}>
+                {groups.map((group) => <Link key={group.id} to={`/groups/${group.id}`} className={styles.groupCard}><span className={styles.groupInitial}>{group.name.slice(0, 1).toUpperCase()}</span><div><h2>{group.name}</h2><p>{group.membersCount} {group.membersCount === 1 ? 'участник' : 'участников'}</p></div><span className={styles.arrow} aria-hidden="true">→</span></Link>)}
             </div>
-            <div className="group-grid">
-                {groups.map((group) => {
-                    const total = expenses
-                        .filter((expense) => expense.groupId === group.id)
-                        .reduce((sum, expense) => sum + expense.amount, 0)
-                    return (
-                        <Link
-                            className="group-card"
-                            key={group.id}
-                            to={`/groups/${group.id}`}
-                        >
-                            <div className="group-card__top">
-                                <span
-                                    className="group-icon"
-                                    style={{ background: group.color }}
-                                >
-                                    {group.icon}
-                                </span>
-                                <div>
-                                    <h3>{group.name}</h3>
-                                    <p>{group.description}</p>
-                                </div>
-                            </div>
-                            <div className="group-card__bottom">
-                                <span className="group-card__amount">
-                                    {formatMoney(total)}
-                                </span>
-                                <span className="group-card__members">
-                                    Открыть →
-                                </span>
-                            </div>
-                        </Link>
-                    )
-                })}
-            </div>
-        </>
+        </main>
     )
 }
+
 export default Groups

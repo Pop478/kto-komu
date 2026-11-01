@@ -1,82 +1,163 @@
-name: VWaifu
+name: KK
 
 services:
     traefik:
         image: traefik:v3
-        pull_policy: never
+        # pull_policy: never
         container_name: traefik
         restart: unless-stopped
         command:
-            - '--api.insecure=true'
+            - '--api.dashboard=false'
+            - '--api.insecure=false'
+            - '--accesslog=true'
+            # Providers
             - '--providers.docker=true'
             - '--providers.docker.exposedbydefault=false'
+            - '--providers.docker.network=app-network'
+            # EntryPoints
             - '--entrypoints.web.address=:80'
+            - '--entrypoints.websecure.address=:443'
+            - '--entrypoints.websecure.http.tls=true'
+            # Redirect HTTP -> HTTPS
+            - '--entrypoints.web.http.redirections.entrypoint.to=websecure'
+            - '--entrypoints.web.http.redirections.entrypoint.scheme=https'
+            - '--entrypoints.web.http.redirections.entrypoint.permanent=true'
+              # Let's Encrypt
+            - '--certificatesresolvers.le.acme.email=${LETSENCRYPT_EMAIL}'
+            - '--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json'
+            - '--certificatesresolvers.le.acme.httpchallenge=true'
+            - '--certificatesresolvers.le.acme.httpchallenge.entrypoint=web'
+            - '--entrypoints.websecure.http.tls.certresolver=le'
+        labels:
+            - 'traefik.enable=true'
+            # Security headers middleware
+            - 'traefik.http.middlewares.secure-headers.headers.frameDeny=true'
+            - 'traefik.http.middlewares.secure-headers.headers.sslRedirect=true'
+            - 'traefik.http.middlewares.secure-headers.headers.browserXssFilter=true'
+            - 'traefik.http.middlewares.secure-headers.headers.contentTypeNosniff=true'
+            - 'traefik.http.middlewares.secure-headers.headers.stsIncludeSubdomains=true'
+            - 'traefik.http.middlewares.secure-headers.headers.stsPreload=true'
+            - 'traefik.http.middlewares.secure-headers.headers.stsSeconds=31536000'
+            - 'traefik.http.middlewares.gzip.compress=true'
+            - 'traefik.http.middlewares.gzip.compress.excludedcontenttypes=text/event-stream'
+            - 'traefik.http.middlewares.kk-security.headers.referrerPolicy=strict-origin-when-cross-origin'
+            - 'traefik.http.middlewares.kk-security.headers.permissionsPolicy=geolocation=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=()'
+            - "traefik.http.middlewares.kk-csp-report.headers.customResponseHeaders.Content-Security-Policy-Report-Only=default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' https://telegram.org https://oauth.telegram.org https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; connect-src 'self' https: wss:; frame-src 'self' https:; worker-src 'self' blob:; manifest-src 'self'; form-action 'self' https:; require-trusted-types-for 'script'"
+            - 'traefik.http.middlewares.kk-browser-security.headers.customResponseHeaders.Cross-Origin-Opener-Policy=same-origin-allow-popups'
+            # Rate Limit
+            - 'traefik.http.middlewares.app-rate.ratelimit.average=100'
+            - 'traefik.http.middlewares.app-rate.ratelimit.period=1s'
+            - 'traefik.http.middlewares.app-rate.ratelimit.burst=200'
+            - 'traefik.http.middlewares.app-concurrency.inflightreq.amount=20'
+            - 'traefik.http.middlewares.app-body-limit.buffering.maxRequestBodyBytes=104857600'
+            # ERROR
+            - 'traefik.http.middlewares.app-errors.errors.status=413,429,500-599'
+            - 'traefik.http.middlewares.app-errors.errors.service=frontend'
+            - 'traefik.http.middlewares.app-errors.errors.query=/error?code={status}'
+            # Dashboard router
+            # - 'traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${URL}`)'
+            # - 'traefik.http.routers.traefik-dashboard.entrypoints=websecure'
+            # - 'traefik.http.routers.traefik-dashboard.tls.certresolver=le'
+            # - 'traefik.http.routers.traefik-dashboard.service=api@internal'
+            # - 'traefik.http.routers.traefik-dashboard.middlewares=dashboard-chain'
+            # Basic Auth
+            # - 'traefik.http.routers.traefik-dashboard.middlewares=dashboard-auth'
+            # - 'traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$2y$05$C9nbPesMyxjlDPdN4XISfOweIRW/kpSekN/i2J2g0z6pGrOgl3Cpa.'
+            # - 'traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${URL}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))'
+            # - 'traefik.http.routers.traefik-dashboard.entrypoints=websecure'
+            # - 'traefik.http.routers.traefik-dashboard.tls=true'
+            # - 'traefik.http.routers.traefik-dashboard.tls.certresolver=le'
+            # - 'traefik.http.routers.traefik-dashboard.service=api@internal'
+            # chains
+            - 'traefik.http.middlewares.web-chain.chain.middlewares=secure-headers,kk-security,kk-browser-security,kk-csp-report,gzip'
+            - 'traefik.http.middlewares.api-chain.chain.middlewares=secure-headers,app-rate,app-concurrency,app-body-limit,gzip' # api
+            - 'traefik.http.middlewares.api-stream-chain.chain.middlewares=secure-headers,app-rate,app-concurrency,gzip' # api streaming
+            - 'traefik.http.middlewares.dashboard-chain.chain.middlewares=secure-headers,kk-security,gzip'
+            - 'traefik.http.middlewares.bot-chain.chain.middlewares=secure-headers,gzip'
         ports:
             - '80:80'
-            - '8080:8080'
+            - '443:443'
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
+            - ./letsencrypt:/letsencrypt
         networks:
             - app-network
 
     frontend:
-        build:
-            context: ./Frontend
+        image: kk-frontend:latest
         container_name: frontend
         restart: unless-stopped
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.routers.frontend.rule=Host(`${URL}`)'
-            - 'traefik.http.routers.frontend.entrypoints=web'
+            - 'traefik.http.routers.frontend.entrypoints=websecure'
+            - 'traefik.http.routers.frontend.tls=true'
+            - 'traefik.http.routers.frontend.tls.certresolver=le'
+            - 'traefik.http.routers.frontend.middlewares=web-chain'
             - 'traefik.http.routers.frontend.priority=1'
+            - 'traefik.http.routers.frontend.service=frontend'
+              # Статические ресурсы Vite и шрифты
+            - 'traefik.http.routers.frontend-static.rule=Host(`${URL}`) && (PathPrefix(`/assets/`) || PathPrefix(`/fonts/`))'
+            - 'traefik.http.routers.frontend-static.entrypoints=websecure'
+            - 'traefik.http.routers.frontend-static.tls=true'
+            - 'traefik.http.routers.frontend-static.tls.certresolver=le'
+            - 'traefik.http.routers.frontend-static.priority=100'
+            - 'traefik.http.routers.frontend-static.service=frontend'
+            - 'traefik.http.routers.frontend-static.middlewares=web-chain,frontend-static-cache'
+
+            # Кеш только статических ресурсов
+            - 'traefik.http.middlewares.frontend-static-cache.headers.customResponseHeaders.Cache-Control=public, max-age=31536000, immutable'
+
             - 'traefik.http.services.frontend.loadbalancer.server.port=3000'
-        ports:
-            - '80:80'
-        environment:
-            APP_PREFIX: 'PREFIX_'
-            ASSET_DIR: '/usr/share/nginx/html'
-            PREFIX_URL: 'https://banana.marusinohome.ru'
-            PREFIX_API_URL: 'https://banana.marusinohome.ru/api'
-            PREFIX_TG_APP_URL: 'https://t.me/AniFight_DEV_Bot/App'
-            PREFIX_SUPPORT_LINK: 'https://t.me/AniFight_support_bot'
-        env_file:
-            - ./Frontend/.env.production
         depends_on:
             - backend
         networks:
             - app-network
 
     admin:
-        build:
-            context: ./admin
+        image: kk-admin:latest
         container_name: admin
         restart: unless-stopped
         labels:
             - 'traefik.enable=true'
-            - 'traefik.http.routers.admin.rule=Host(`${URL}`) && (PathPrefix(`/api`))'
-            - 'traefik.http.routers.admin.entrypoints=web'
+            - 'traefik.http.routers.admin.rule=Host(`admin.${URL}`)'
+            - 'traefik.http.routers.admin.entrypoints=websecure'
+            - 'traefik.http.routers.admin.tls=true'
+            - 'traefik.http.routers.admin.tls.certresolver=le'
+            - 'traefik.http.routers.admin.middlewares=web-chain'
             - 'traefik.http.routers.admin.priority=1'
             - 'traefik.http.services.admin.loadbalancer.server.port=3000'
-        ports:
-            - '80:80'
         depends_on:
             - backend
         networks:
             - app-network
 
     backend:
-        build:
-            context: ./Backend
+        image: kk-backend:latest
         container_name: backend
         restart: unless-stopped
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.routers.backend.rule=Host(`${URL}`) && (PathPrefix(`/api`))'
-            - 'traefik.http.routers.backend.entrypoints=web'
+            - 'traefik.http.routers.backend.entrypoints=websecure'
+            - 'traefik.http.routers.backend.tls=true'
+            - 'traefik.http.routers.backend.tls.certresolver=le'
+            - 'traefik.http.routers.backend.middlewares=api-chain'
             - 'traefik.http.routers.backend.priority=100'
+            # Streaming router
+            - 'traefik.http.routers.api-stream.rule=Host(`${URL}`) && Method(`POST`) && PathRegexp(`^/api/v1/chat/[^/]+/messages(?:/.*)?$`)'
+            - 'traefik.http.routers.api-stream.entrypoints=websecure'
+            - 'traefik.http.routers.api-stream.tls=true'
+            - 'traefik.http.routers.api-stream.tls.certresolver=le'
+            - 'traefik.http.routers.api-stream.middlewares=api-stream-chain'
+            - 'traefik.http.routers.api-stream.service=backend'
+            - 'traefik.http.routers.api-stream.priority=200'
+
             - 'traefik.http.services.backend.loadbalancer.server.port=8080'
         env_file:
             - ./Backend/.env
+        volumes:
+            - backend_uploads:/app/public
         depends_on:
             - postgres
         networks:
@@ -84,7 +165,7 @@ services:
 
     postgres:
         image: postgres:16
-        pull_policy: never
+        # pull_policy: never
         container_name: postgres
         restart: always
         environment:
@@ -101,7 +182,7 @@ services:
 
     redis:
         image: redis:8.6.4-alpine
-        pull_policy: never
+        # pull_policy: never
         container_name: redis
         restart: unless-stopped
         volumes:
@@ -111,6 +192,7 @@ services:
 
 volumes:
     postgres_data:
+    backend_uploads:
     redis_data:
 
 networks:

@@ -1,0 +1,360 @@
+openapi: 3.1.0
+info:
+  title: VWaifu Admin API
+  version: 1.0.0
+  license:
+    name: MIT
+    identifier: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:5000/api
+security:
+  - adminCookieAuth: []
+paths:
+  /v1/auth/admin/login:
+    post:
+      summary: Авторизация в админ панель
+      operationId: loginAdmin
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  description: Логин администратора
+                password:
+                  type: string
+                  format: password
+                  description: Пароль администратора
+      responses:
+        '200':
+          description: Успешная авторизация
+          headers:
+            Set-Cookie:
+              description: Устанавливает ADMIN_ACCESS_TOKEN cookie
+              schema:
+                type: string
+                example: ADMIN_ACCESS_TOKEN=jwt; HttpOnly; Path=/; SameSite=Lax
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginAdminSuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/auth/admin/me:
+    get:
+      summary: Проверка админа
+      operationId: MeAdmin
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Успешная проверка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginAdminSuccessResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/auth/admin/logout:
+    post:
+      summary: Выход
+      operationId: logoutAdmin
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Успешный выход
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Logout successful
+                required:
+                  - ok
+                  - message
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/admin/users:
+    get:
+      summary: Get admin users
+      operationId: getAdminUsers
+      tags:
+        - AdminUsers
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 20
+        - in: query
+          name: search
+          schema:
+            type: string
+            example: '@ivan'
+        - in: query
+          name: isBanned
+          schema:
+            type: boolean
+            example: false
+        - in: query
+          name: role
+          schema:
+            type: string
+            enum:
+              - user
+              - admin
+            example: user
+      responses:
+        '200':
+          description: Users list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    adminCookieAuth:
+      type: apiKey
+      in: cookie
+      name: ADMIN_ACCESS_TOKEN
+  schemas:
+    LoginAdminSuccessResponse:
+      type: object
+      required:
+        - ok
+        - admin
+      properties:
+        ok:
+          type: boolean
+          example: true
+        admin:
+          type: object
+          additionalProperties: false
+          required:
+            - id
+            - email
+            - role
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 019eebca-0343-763f-a60d-e6546804b0b6
+            email:
+              type: string
+              format: email
+              example: admin@local.dev
+            role:
+              type: string
+              enum:
+                - owner
+                - admin
+                - ad_manager
+                - viewer
+              example: owner
+    AdminUserBase:
+      type: object
+      required:
+        - id
+        - telegramId
+        - username
+        - first_name
+        - last_name
+        - is_premium
+        - languageCode
+        - photo_url
+        - role
+        - theme
+        - ban
+        - isBanned
+        - is_active
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 019e569b-5d3d-76e0-9e3b-933e1806a0cc
+        telegramId:
+          type:
+            - string
+            - 'null'
+          example: '6337131614'
+        username:
+          type:
+            - string
+            - 'null'
+          example: Ivan
+        first_name:
+          type:
+            - string
+            - 'null'
+          example: Ivan
+        last_name:
+          type:
+            - string
+            - 'null'
+          example: ''
+        is_premium:
+          type: boolean
+          example: false
+        languageCode:
+          type:
+            - string
+            - 'null'
+          example: ru
+        photo_url:
+          type:
+            - string
+            - 'null'
+          format: uri
+          example: https://example.com/avatar.svg
+        role:
+          type: string
+          enum:
+            - user
+            - manager
+            - admin
+          example: user
+        theme:
+          type: string
+          enum:
+            - light
+            - dark
+            - system
+          example: dark
+        ban:
+          type: boolean
+          example: false
+        isBanned:
+          type: boolean
+          example: false
+        is_active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-05-23T20:51:23.070Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2026-05-27T09:33:22.074Z'
+    AdminUserListItem:
+      allOf:
+        - $ref: '#/components/schemas/AdminUserBase'
+    UsersListResponse:
+      type: object
+      required:
+        - ok
+        - users
+        - pagination
+      properties:
+        ok:
+          type: boolean
+          example: true
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminUserListItem'
+        pagination:
+          type: object
+          required:
+            - page
+            - limit
+            - total
+            - totalPages
+          properties:
+            page:
+              type: integer
+              minimum: 1
+              example: 1
+            limit:
+              type: integer
+              minimum: 1
+              maximum: 100
+              example: 20
+            total:
+              type: integer
+              minimum: 0
+              example: 100
+            totalPages:
+              type: integer
+              minimum: 0
+              example: 5
+  responses:
+    BadRequest:
+      description: Неверный запрос
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+    Unauthorized:
+      description: Неавторизован
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              message:
+                type: string
+    InternalServerError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+            required:
+              - error
+    Forbidden:
+      description: Доступ запрещён
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              error:
+                type: string
+            required:
+              - error

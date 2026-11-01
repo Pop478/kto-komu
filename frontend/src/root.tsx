@@ -1,14 +1,20 @@
 import {
     isRouteErrorResponse,
     Links,
+    Navigate,
     Outlet,
     Scripts,
     ScrollRestoration,
+    useNavigate,
 } from 'react-router'
 import 'normalize.css'
 import './styles/index.css'
 import './App.css'
 import Loader from './components/loader/Loader'
+import { useEffect } from 'react'
+import { useUserStore } from './stores/user.store'
+import { useShallow } from 'zustand/shallow'
+import { OpenAPI } from './api'
 
 // export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 //     await i18nInitPromise
@@ -24,6 +30,8 @@ import Loader from './components/loader/Loader'
 // }
 
 // clientLoader.hydrate = true as const
+
+OpenAPI.WITH_CREDENTIALS = true
 
 export function HydrateFallback() {
     return (
@@ -71,11 +79,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    return (
-        <>
-            <Outlet />
-        </>
-    )
+    const initializeAuth = useUserStore((s) => s.initializeAuth)
+
+    useEffect(() => {
+        void initializeAuth()
+    }, [initializeAuth])
+
+    // if (authStatus === 'unauthenticated') {
+    //     return <Navigate to="/login" replace />
+    // }
+
+    return <Outlet />
 }
 
 export function ErrorBoundary({ error }) {
