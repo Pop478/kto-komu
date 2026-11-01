@@ -38,7 +38,7 @@ jobs:
             - name: Deploy containers
               working-directory: /opt/kk
               run: |
-                  docker compose up -d --remove-orphans --no-build
+                  docker compose up -d
             - name: Cleanup old Docker images
               run: |
                   docker image prune -f
