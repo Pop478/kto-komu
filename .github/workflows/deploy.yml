@@ -25,12 +25,12 @@ jobs:
             - name: Copy project files
               run: |
                   rsync -av --delete \
-                    --exclude='.git' \
-                    --exclude='.env' \
-                    --exclude='Backend/.env' \
-                    --exclude='node_modules' \
-                    --exclude='/letsencrypt/'
-                    ./ /opt/kk/
+                  --exclude='.git/' \
+                  --exclude='.env' \
+                  --exclude='Backend/.env' \
+                  --exclude='letsencrypt/' \
+                  --exclude='node_modules/' \
+                  ./ /opt/kk/
             - name: Build Docker images
               working-directory: /opt/kk
               run: |
