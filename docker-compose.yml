@@ -88,7 +88,7 @@ services:
         container_name: frontend
         build:
             context: .
-            dockerfile: ./Frontend/Dockerfile
+            dockerfile: ./frontend/dockerfile
         restart: unless-stopped
         labels:
             - 'traefik.enable=true'
@@ -140,7 +140,7 @@ services:
         container_name: backend
         build:
             context: .
-            dockerfile: ./Frontend/Dockerfile
+            dockerfile: ./backend/dockerfile
         restart: unless-stopped
         labels:
             - 'traefik.enable=true'
@@ -161,7 +161,7 @@ services:
 
             - 'traefik.http.services.backend.loadbalancer.server.port=8080'
         env_file:
-            - ./Backend/.env
+            - ./backend/.env
         volumes:
             - backend_uploads:/app/public
         depends_on:
