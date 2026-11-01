@@ -87,8 +87,8 @@ services:
         image: kk-frontend:latest
         container_name: frontend
         build:
-            context: .
-            dockerfile: ./frontend/dockerfile
+            context: ./frontend
+            dockerfile: dockerfile
         restart: unless-stopped
         labels:
             - 'traefik.enable=true'
@@ -139,8 +139,8 @@ services:
         image: kk-backend:latest
         container_name: backend
         build:
-            context: .
-            dockerfile: ./backend/dockerfile
+            context: ./backend
+            dockerfile: dockerfile
         restart: unless-stopped
         labels:
             - 'traefik.enable=true'
