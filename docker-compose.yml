@@ -114,23 +114,23 @@ services:
         networks:
             - app-network
 
-    admin:
-        image: kk-admin:latest
-        container_name: admin
-        restart: unless-stopped
-        labels:
-            - 'traefik.enable=true'
-            - 'traefik.http.routers.admin.rule=Host(`admin.${URL}`)'
-            - 'traefik.http.routers.admin.entrypoints=websecure'
-            - 'traefik.http.routers.admin.tls=true'
-            - 'traefik.http.routers.admin.tls.certresolver=le'
-            - 'traefik.http.routers.admin.middlewares=web-chain'
-            - 'traefik.http.routers.admin.priority=1'
-            - 'traefik.http.services.admin.loadbalancer.server.port=3000'
-        depends_on:
-            - backend
-        networks:
-            - app-network
+    # admin:
+    #     image: kk-admin:latest
+    #     container_name: admin
+    #     restart: unless-stopped
+    #     labels:
+    #         - 'traefik.enable=true'
+    #         - 'traefik.http.routers.admin.rule=Host(`admin.${URL}`)'
+    #         - 'traefik.http.routers.admin.entrypoints=websecure'
+    #         - 'traefik.http.routers.admin.tls=true'
+    #         - 'traefik.http.routers.admin.tls.certresolver=le'
+    #         - 'traefik.http.routers.admin.middlewares=web-chain'
+    #         - 'traefik.http.routers.admin.priority=1'
+    #         - 'traefik.http.services.admin.loadbalancer.server.port=3000'
+    #     depends_on:
+    #         - backend
+    #     networks:
+    #         - app-network
 
     backend:
         image: kk-backend:latest
